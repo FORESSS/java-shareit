@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 @Builder
-public class ItemDto {
+public class ItemDTO {
     @NotNull
     private long id;
     @NotBlank
