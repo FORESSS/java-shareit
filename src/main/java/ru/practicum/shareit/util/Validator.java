@@ -15,26 +15,25 @@ public class Validator {
     private final ItemRepository itemRepository;
 
     public void checkUserId(Long userId) {
-        if (userRepository.getUserById(userId).isEmpty()) {
+        if (!userRepository.existsById(userId)) {
             throw new ValidationException("Пользователь с id: " + userId + " не найден");
         }
     }
 
     public void checkItemId(Long itemId) {
-        if (userRepository.getUserById(itemId).isEmpty()) {
+        if (!itemRepository.existsById(itemId)) {
             throw new ValidationException("Предмет с id: " + itemId + " не найден");
         }
     }
 
     public void checkEmail(String email) {
-        if (userRepository.getAllUsers().stream().anyMatch(user -> user.getEmail().equals(email))) {
+        if (userRepository.existsByEmail(email)) {
             throw new InvalidRequestException("Email уже используется");
         }
     }
 
     public void checkEmail(String email, Long userId) {
-        if (userRepository.getAllUsers().stream()
-                .anyMatch(user -> user.getEmail().equals(email) && user.getId() != userId)) {
+        if (userRepository.existsByEmail(email, userId)) {
             throw new InvalidRequestException("Email занят");
         }
     }

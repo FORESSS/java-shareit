@@ -54,6 +54,11 @@ public class InMemoryItemRepository implements ItemRepository {
         items.remove(itemId);
     }
 
+    @Override
+    public boolean existsById(Long itemId) {
+        return items.containsKey(itemId);
+    }
+
     private long generateNewId() {
         return ++currentId;
     }

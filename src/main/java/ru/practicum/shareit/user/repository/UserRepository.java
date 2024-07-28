@@ -16,4 +16,10 @@ public interface UserRepository {
     User updateUser(Long userId, User user);
 
     void deleteUserById(Long userId);
+
+    boolean existsById(Long userId);
+
+    boolean existsByEmail(String email);
+
+    boolean existsByEmail(String email, Long userId);
 }
