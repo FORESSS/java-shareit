@@ -30,4 +30,25 @@ public class ErrorHandler {
         log.info(ex.getMessage());
         return new ErrorResponse("Некорректный запрос", ex.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidCommentException.class)
+    public ErrorResponse handleInvalidCommentException(InvalidCommentException ex) {
+        log.info(ex.getMessage());
+        return new ErrorResponse("Ошибка добавления комментария", ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(InvalidBookingException.class)
+    public ErrorResponse handleInvalidBookingException(InvalidBookingException ex) {
+        log.info(ex.getMessage());
+        return new ErrorResponse("Ошибка бронирования", ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(AccessException.class)
+    public ErrorResponse handleAccessException(AccessException ex) {
+        log.info(ex.getMessage());
+        return new ErrorResponse("Ошибка доступа", ex.getMessage());
+    }
 }

@@ -1,9 +1,9 @@
-package ru.practicum.shareit.booking.dto;
+package ru.practicum.shareit.comment.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -12,11 +12,12 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-public class BookingDTO {
+public class CommentDTO {
     private long id;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    @NotBlank
+    private String text;
     private Item item;
-    private User booker;
-    private BookingStatus status;
+    private User author;
+    private LocalDateTime created;
 }
+

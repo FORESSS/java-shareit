@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ValidationException;
-import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDTO;
 import ru.practicum.shareit.user.dto.UserMapper;
-import ru.practicum.shareit.user.dto.UserUpdateDTO;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.util.Validator;
 
@@ -23,16 +22,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Collection<UserDTO> getAllUsers() {
         log.info("Возврат списка всех пользователей");
-        return userRepository.getAllUsers().stream()
+        return userRepository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .toList();
     }
 
     @Override
-    public UserDTO getUserById(Long userId) {
+    public UserDTO getUserById(long userId) {
         validator.checkUserId(userId);
         log.info("Возврат пользователя с id: {}", userId);
-        return userRepository.getUserById(userId)
+        return userRepository.findById(userId)
                 .map(UserMapper::toUserDto)
                 .orElseThrow(() -> new ValidationException("Пользователь с id: " + userId + " не найден"));
     }
@@ -41,30 +40,35 @@ public class UserServiceImpl implements UserService {
     public UserDTO createUser(UserDTO userDto) {
         validator.checkEmail(userDto.getEmail());
         User user = UserMapper.toUser(userDto);
+        userRepository.save(user);
         log.info("Создание нового пользователя с id: {}", user.getId());
-        return UserMapper.toUserDto(userRepository.createUser(user));
-    }
-
-    @Override
-    public UserDTO updateUser(Long userId, UserUpdateDTO userDto) {
-        validator.checkUserId(userId);
-        validator.checkEmail(userDto.getEmail(), userId);
-        User user = userRepository.getUserById(userId).orElseThrow(() ->
-                new ValidationException("Пользователь с id: " + userId + " не найден"));
-        if (userDto.getName() != null) {
-            user.setName(userDto.getName());
-        }
-        if (userDto.getEmail() != null) {
-            user.setEmail(userDto.getEmail());
-        }
-        log.info("Обновление пользователя с id: {}", userId);
         return UserMapper.toUserDto(user);
     }
 
     @Override
-    public void deleteUserById(Long userId) {
+    public UserDTO updateUser(long userId, UserDTO user) {
+        validator.checkUserId(userId);
+        User oldUser = userRepository.findById(userId).get();
+
+        String newEmail = user.getEmail();
+        if (newEmail != null && !newEmail.equals(oldUser.getEmail())) {
+            validator.checkEmail(user.getEmail());
+            oldUser.setEmail(newEmail);
+        }
+
+        String newName = user.getName();
+        if (newName != null) {
+            oldUser.setName(newName);
+        }
+
+        User user1 = userRepository.save(oldUser);
+        return UserMapper.toUserDto(user1);
+    }
+
+    @Override
+    public void deleteUserById(long userId) {
         validator.checkUserId(userId);
         log.info("Удаление пользователя с id: {}", userId);
-        userRepository.deleteUserById(userId);
+        userRepository.deleteById(userId);
     }
 }
