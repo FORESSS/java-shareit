@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exception.InvalidBookingException;
-import ru.practicum.shareit.exception.InvalidRequestException;
-import ru.practicum.shareit.exception.PermissionDeniedException;
-import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.exception.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
@@ -52,7 +49,13 @@ public class Validator {
 
     public void checkEmail(String email) {
         if (userRepository.existsByEmail(email)) {
+
             throw new InvalidRequestException(String.format("Email %s уже используется", email));
+        }
+    }
+    public void checkEmailUnique(String email) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new DuplicateEmailException("Email '" + email + "' already exists.");
         }
     }
 
