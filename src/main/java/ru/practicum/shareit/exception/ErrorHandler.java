@@ -51,11 +51,4 @@ public class ErrorHandler {
         log.error(ex.getMessage());
         return new ErrorResponse("Ошибка доступа", ex.getMessage());
     }
-
-    @ResponseStatus(HttpStatus.CONFLICT)
-    @ExceptionHandler(DuplicateEmailException.class)
-    public ErrorResponse handleDuplicateEmailException(DuplicateEmailException ex) {
-        log.error(ex.getMessage());
-        return new ErrorResponse("Ошибка валидации", ex.getMessage());
-    }
 }
