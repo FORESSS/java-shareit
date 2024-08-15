@@ -10,12 +10,11 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @Builder
 public class UserDTO {
-    @NotNull
     private long id;
 
     @Length(max = 50)
     private String name;
-    @NotBlank
+
     @Email
     private String email;
 }
