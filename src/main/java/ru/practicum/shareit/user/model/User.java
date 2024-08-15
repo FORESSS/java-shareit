@@ -8,10 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * TODO Sprint add-controllers.
- */
-
 @Entity
 @Table(name = "users")
 @Data
@@ -21,12 +17,10 @@ import lombok.NoArgsConstructor;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @NotBlank(message = "User name should not be empty.")
+    private long id;
+    @NotBlank
     private String name;
-
+    @NotBlank
     @Email
-    @NotBlank(message = "Email should not be empty.")
     private String email;
 }

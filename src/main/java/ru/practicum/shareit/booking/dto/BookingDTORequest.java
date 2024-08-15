@@ -10,12 +10,10 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 @AllArgsConstructor
-public class BookingDtoRequest {
-    private int itemId;
-
+public class BookingDTORequest {
+    private long itemId;
     @FutureOrPresent
     private LocalDateTime start;
-
     @FutureOrPresent
     private LocalDateTime end;
 }

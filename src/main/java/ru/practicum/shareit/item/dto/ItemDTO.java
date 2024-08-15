@@ -5,28 +5,28 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.booking.dto.BookingDto;
+import org.hibernate.validator.constraints.Length;
+import ru.practicum.shareit.booking.dto.BookingDTO;
+import ru.practicum.shareit.comment.dto.CommentDTO;
 import ru.practicum.shareit.request.model.ItemRequest;
 
-import java.util.List;
-
-/**
- * TODO Sprint add-controllers.
- */
+import java.util.Collection;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class ItemDto {
-    private int id;
+public class ItemDTO {
+    private long id;
     @NotBlank
+    @Length(max = 50)
     private String name;
     @NotBlank
+    @Length(max = 200)
     private String description;
     @NotNull
     private Boolean available;
     private ItemRequest request;
-    private List<CommentDtoExport> comments;
-    private BookingDto lastBooking;
-    private BookingDto nextBooking;
+    private Collection<CommentDTO> comments;
+    private BookingDTO lastBooking;
+    private BookingDTO nextBooking;
 }
