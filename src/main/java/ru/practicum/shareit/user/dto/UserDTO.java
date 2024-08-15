@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class UserDTO {
+public class UserDto {
     private int id;
     private String name;
 

@@ -9,11 +9,15 @@ import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
+/**
+ * TODO Sprint add-bookings.
+ */
+
 @Data
 @Builder
 @AllArgsConstructor
-public class BookingDTO {
-    private long id;
+public class BookingDto {
+    private int id;
     private LocalDateTime start;
     private LocalDateTime end;
     private Item item;
