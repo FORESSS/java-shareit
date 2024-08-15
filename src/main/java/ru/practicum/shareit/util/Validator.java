@@ -53,6 +53,7 @@ public class Validator {
             throw new InvalidRequestException(String.format("Email %s уже используется", email));
         }
     }
+
     public void checkEmailUnique(String email) {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new DuplicateEmailException("Email '" + email + "' already exists.");
