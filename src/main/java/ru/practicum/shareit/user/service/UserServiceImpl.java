@@ -3,7 +3,7 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.ValidationException;
+import ru.practicum.shareit.exception.ConException;
 import ru.practicum.shareit.user.dto.UserDTO;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO userDto) {
-        if (!userRepository.existsById(userDto.getId())) {
-            throw new ValidationException("User with id %d is not found.111111111111111111111111111111111111111");
+        if (userRepository.findAll().stream().anyMatch(user -> user.getEmail().equals(userDto.getEmail()))) {
+            throw new ConException(String.format("Failed to add user with email %s, email is not unique.", userDto.getEmail()));
         }
         User user = userRepository.save(UserMapper.toUser(userDto));
         return UserMapper.toUserDto(user);
