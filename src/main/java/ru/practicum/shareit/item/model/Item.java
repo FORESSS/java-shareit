@@ -7,9 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.Length;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
+
+/**
+ * TODO Sprint add-controllers.
+ */
 
 @Entity
 @Table(name = "items")
@@ -20,19 +23,29 @@ import ru.practicum.shareit.user.model.User;
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @NotBlank
-    @Length(max = 50)
+    private int id;
+
+    @NotBlank(message = "Item name should not be empty.")
     private String name;
-    @NotBlank
-    @Length(max = 200)
+
+    @NotBlank(message = "Item description should not be empty.")
     private String description;
+
     @NotNull
     private Boolean available;
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
+
     @ManyToOne
     @JoinColumn(name = "request_id")
     private ItemRequest request;
+
+    public Item(int id, String name, String description, boolean available, Integer request) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.available = available;
+    }
 }
