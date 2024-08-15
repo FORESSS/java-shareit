@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @Builder
 public class UserDTO {
-    @NotNull
+
     private long id;
     @NotBlank
     @Length(max = 50)
