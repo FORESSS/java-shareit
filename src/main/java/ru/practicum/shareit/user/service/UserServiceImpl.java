@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO createUser(UserDTO userDto) {
+    public UserDTO add(UserDTO userDto) {
         if (userRepository.findAll().stream().anyMatch(user -> user.getEmail().equals(userDto.getEmail()))) {
             throw new ConException(String.format("Failed to add user with email %s, email is not unique.", userDto.getEmail()));
         }
