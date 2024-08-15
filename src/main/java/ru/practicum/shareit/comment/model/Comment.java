@@ -21,7 +21,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @NotBlank(message = "Comment should not be empty.")
+    @NotBlank
     private String text;
     @ManyToOne
     @JoinColumn(name = "item_id")

@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
@@ -13,11 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 public class CommentDTO {
-    private long id;
+    private Long id;
     @NotBlank
     private String text;
-    private Item item;
-    private User author;
+    private String authorName;
     private LocalDateTime created;
 }
-

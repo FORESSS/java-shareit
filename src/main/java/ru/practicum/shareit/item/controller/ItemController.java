@@ -6,7 +6,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.comment.dto.CommentDTOExport;
+import ru.practicum.shareit.comment.dto.CommentDTO;
 import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.item.dto.ItemDTO;
 import ru.practicum.shareit.item.service.ItemService;
@@ -62,9 +62,9 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDTOExport addComment(@PathVariable long itemId,
-                                       @RequestHeader(USER_ID_HEADER) long userId,
-                                       @Valid @RequestBody Comment comment) {
+    public CommentDTO addComment(@PathVariable long itemId,
+                                 @RequestHeader(USER_ID_HEADER) long userId,
+                                 @Valid @RequestBody Comment comment) {
         return itemService.addComment(userId, itemId, comment);
     }
 }

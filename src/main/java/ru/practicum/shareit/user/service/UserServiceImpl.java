@@ -3,7 +3,6 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.user.dto.UserDTO;
 import ru.practicum.shareit.user.dto.UserMapper;
 import ru.practicum.shareit.user.model.User;
@@ -21,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Collection<UserDTO> getAllUsers() {
-        log.info("Возврат списка всех пользователей");
+        log.info("Получение списка всех пользователей");
         return userRepository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .toList();
@@ -29,11 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserById(long userId) {
-        validator.checkUserId(userId);
-        log.info("Возврат пользователя с id: {}", userId);
-        return userRepository.findById(userId)
-                .map(UserMapper::toUserDto)
-                .orElseThrow(() -> new ValidationException("Пользователь с id: " + userId + " не найден"));
+        User user = validator.validateAndGetUser(userId);
+        log.info("Получение пользователя с id: {}", userId);
+        return UserMapper.toUserDto(user);
     }
 
     @Override
@@ -46,23 +43,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUser(long userId, UserDTO user) {
-        validator.checkUserId(userId);
-        User oldUser = userRepository.findById(userId).get();
-
-        String newEmail = user.getEmail();
-        if (newEmail != null && !newEmail.equals(oldUser.getEmail())) {
-            validator.checkEmail(user.getEmail());
-            oldUser.setEmail(newEmail);
+    public UserDTO updateUser(long userId, UserDTO userDto) {
+        User user = validator.validateAndGetUser(userId);
+        String newEmail = userDto.getEmail();
+        if (newEmail != null) {
+            validator.checkEmail(newEmail);
+            user.setEmail(newEmail);
         }
-
-        String newName = user.getName();
-        if (newName != null) {
-            oldUser.setName(newName);
+        String newName = userDto.getName();
+        if (newName != null && !newName.isBlank()) {
+            user.setName(newName);
         }
-
-        User user1 = userRepository.save(oldUser);
-        return UserMapper.toUserDto(user1);
+        userRepository.save(user);
+        log.info("Обновление пользователя с id: {}", userId);
+        return UserMapper.toUserDto(user);
     }
 
     @Override

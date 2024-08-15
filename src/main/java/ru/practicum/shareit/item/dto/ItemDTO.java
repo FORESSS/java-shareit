@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import ru.practicum.shareit.booking.dto.BookingDTO;
-import ru.practicum.shareit.comment.dto.CommentDTOExport;
+import ru.practicum.shareit.comment.dto.CommentDTO;
 import ru.practicum.shareit.request.model.ItemRequest;
 
 import java.util.Collection;
@@ -26,7 +26,7 @@ public class ItemDTO {
     @NotNull
     private Boolean available;
     private ItemRequest request;
-    private Collection<CommentDTOExport> comments;
+    private Collection<CommentDTO> comments;
     private BookingDTO lastBooking;
     private BookingDTO nextBooking;
 }

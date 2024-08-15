@@ -5,22 +5,12 @@ import ru.practicum.shareit.comment.model.Comment;
 
 @Component
 public class CommentMapper {
-    public static CommentDTOExport toCommentDtoExport(Comment comment) {
-        return CommentDTOExport.builder()
+    public static CommentDTO toCommentDto(Comment comment) {
+        return CommentDTO.builder()
                 .id(comment.getId())
                 .text(comment.getText())
                 .authorName(comment.getAuthor().getName())
                 .created(comment.getCreated())
-                .build();
-    }
-
-    public static Comment toComment(CommentDTO commentDto) {
-        return Comment.builder()
-                .id(commentDto.getId())
-                .text(commentDto.getText())
-                .item(commentDto.getItem())
-                .author(commentDto.getAuthor())
-                .created(commentDto.getCreated())
                 .build();
     }
 }

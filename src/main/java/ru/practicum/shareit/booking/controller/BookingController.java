@@ -22,23 +22,23 @@ public class BookingController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<BookingDTO> getAllBookings(@RequestHeader(USER_ID_HEADER) @Positive long userId,
-                                                 @RequestParam(name = "state", defaultValue = "ALL") BookingState bookingState) {
-        return bookingService.getAllBookings(userId, bookingState);
+    public Collection<BookingDTO> getUserBookings(@RequestHeader(USER_ID_HEADER) @Positive long userId,
+                                                  @RequestParam(name = "state", defaultValue = "ALL") BookingState bookingState) {
+        return bookingService.getUserBookings(userId, bookingState);
     }
 
     @GetMapping("/{bookingId}")
     @ResponseStatus(HttpStatus.OK)
-    public BookingDTO getBookingById(@RequestHeader(USER_ID_HEADER) @Positive long userId,
-                                     @PathVariable @NotNull Long bookingId) {
-        return bookingService.getBookingById(userId, bookingId);
+    public BookingDTO getBookingByIdAndUser(@RequestHeader(USER_ID_HEADER) @Positive long userId,
+                                            @PathVariable @NotNull Long bookingId) {
+        return bookingService.getBookingByIdAndUser(userId, bookingId);
     }
 
     @GetMapping("/owner")
     @ResponseStatus(HttpStatus.OK)
-    public Collection<BookingDTO> getAllByOwner(@RequestHeader(USER_ID_HEADER) @Positive long userId,
-                                                @RequestParam(name = "state", defaultValue = "ALL") BookingState bookingState) {
-        return bookingService.getAllByOwner(userId, bookingState);
+    public Collection<BookingDTO> getOwnerBookings(@RequestHeader(USER_ID_HEADER) @Positive long userId,
+                                                   @RequestParam(name = "state", defaultValue = "ALL") BookingState bookingState) {
+        return bookingService.getOwnerBookings(userId, bookingState);
     }
 
     @PostMapping
