@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO createUser(@RequestBody @Valid UserDTO user) {
-                return userService.createUser(user);
+        return userService.createUser(user);
     }
 
     @PatchMapping("/{userId}")
