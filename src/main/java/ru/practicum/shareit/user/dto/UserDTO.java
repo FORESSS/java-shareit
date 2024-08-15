@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 public class UserDTO {
     @NotNull
     private long id;
-    @NotBlank
+
     @Length(max = 50)
     private String name;
     @NotBlank
