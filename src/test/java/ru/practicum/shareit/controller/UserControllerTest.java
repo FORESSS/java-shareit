@@ -33,7 +33,7 @@ class UserControllerTest {
     @BeforeEach
     void create() {
         userDTO = UserDTO.builder()
-                .id(1L)
+                .id(1)
                 .name("User")
                 .email("test@test.ru")
                 .build();
@@ -61,7 +61,7 @@ class UserControllerTest {
 
     @Test
     void testCreateUser() throws Exception {
-        when(userService.createUser(any(UserDTO.class))).thenReturn(userDTO);
+        when(userService.add(any(UserDTO.class))).thenReturn(userDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
