@@ -21,6 +21,5 @@ public class User {
     @NotBlank
     private String name;
     @NotBlank
-    @Email
-    private String email;
+       private String email;
 }
