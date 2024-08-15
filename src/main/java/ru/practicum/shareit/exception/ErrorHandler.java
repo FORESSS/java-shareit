@@ -51,6 +51,7 @@ public class ErrorHandler {
         log.error(ex.getMessage());
         return new ErrorResponse("Ошибка доступа", ex.getMessage());
     }
+
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ConException.class)
     public ErrorResponse handleConException(ConException ex) {
