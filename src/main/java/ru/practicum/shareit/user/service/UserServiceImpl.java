@@ -37,10 +37,13 @@ public class UserServiceImpl implements UserService {
     public UserDTO createUser(UserDTO userDto) {
         //validator.checkEmail(userDto.getEmail());
         validator.checkEmailUnique(userDto.getEmail());
+
+
         User user = UserMapper.toUser(userDto);
+        User createdUser = userRepository.save(user);
         userRepository.save(user);
         log.info("Создание нового пользователя с id: {}", user.getId());
-        return UserMapper.toUserDto(user);
+        return UserMapper.toUserDto(createdUser);
     }
 
     @Override

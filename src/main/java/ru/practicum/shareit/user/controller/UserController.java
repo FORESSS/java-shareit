@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,8 +30,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(@RequestBody UserDTO user) {
-        return userService.createUser(user);
+    public UserDTO createUser(@RequestBody @Valid UserDTO user) {
+                return userService.createUser(user);
     }
 
     @PatchMapping("/{userId}")
