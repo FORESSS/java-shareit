@@ -1,28 +1,29 @@
 package ru.practicum.shareit.item.dto;
 
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Builder;
-import lombok.Data;
-import org.hibernate.validator.constraints.Length;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import ru.practicum.shareit.validator.ValidateWhile;
 
-@Data
 @Builder
-public class ItemDTO {
-    @NotNull
-    private long id;
-    @NotBlank
-    @Length(max = 50)
+@Getter
+@Setter
+@ToString
+public class ItemDto {
+
+    @Null(groups = ValidateWhile.Create.class, message = "При создании вещи id должно быть null.")
+    private Long id;
+
+    @NotBlank(groups = ValidateWhile.Create.class, message = "Имя для Item не может быть пустым")
     private String name;
-    @NotBlank
-    @Length(max = 200)
+    @NotBlank(groups = ValidateWhile.Create.class, message = "Описание для Item не может быть пустым")
     private String description;
-    @NotNull
-    @AssertTrue
+
+    @NotNull(groups = ValidateWhile.Create.class)
     private Boolean available;
-    @NotNull
-    private long owner;
-    @NotNull
-    private long request;
+
 }
