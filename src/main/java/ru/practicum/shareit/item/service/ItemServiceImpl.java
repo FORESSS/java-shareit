@@ -53,7 +53,7 @@ public class ItemServiceImpl implements ItemService {
             return Collections.emptyList();
         }
         log.info("Поиск предметов по тексту: {}", text);
-        return itemRepository.findByNameContainingIgnoreCaseAndAvailableTrueOrDescriptionContainingIgnoreCaseAndAvailableTrue(text, text)
+        return itemRepository.searchByNameOrDescription(text)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .toList();
