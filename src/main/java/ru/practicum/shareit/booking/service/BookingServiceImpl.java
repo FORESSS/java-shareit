@@ -29,13 +29,11 @@ public class BookingServiceImpl implements BookingService {
         validator.checkUserId(userId);
         LocalDateTime currentTime = LocalDateTime.now();
         Collection<Booking> bookings = switch (bookingState) {
-            case CURRENT ->
-                    bookingRepository.findAllByBookerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, currentTime, currentTime);
-            case PAST -> bookingRepository.findAllByBookerIdAndEndBeforeOrderByStartDesc(userId, currentTime);
-            case FUTURE -> bookingRepository.findAllByBookerIdAndStartAfterOrderByStartDesc(userId, currentTime);
-            case WAITING -> bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, BookingStatus.WAITING);
-            case REJECTED ->
-                    bookingRepository.findAllByBookerIdAndStatusOrderByStartDesc(userId, BookingStatus.REJECTED);
+            case CURRENT -> bookingRepository.findCurrentBookings(userId, currentTime, currentTime);
+            case PAST -> bookingRepository.findPastBookings(userId, currentTime);
+            case FUTURE -> bookingRepository.findUpcomingBookings(userId, currentTime);
+            case WAITING -> bookingRepository.findBookingsByStatus(userId, BookingStatus.WAITING);
+            case REJECTED -> bookingRepository.findBookingsByStatus(userId, BookingStatus.REJECTED);
             default -> bookingRepository.findAllByBookerId(userId);
         };
         log.info("Получение списка всех бронирований пользователя с id: {}", userId);
@@ -58,15 +56,12 @@ public class BookingServiceImpl implements BookingService {
         validator.checkUserId(userId);
         LocalDateTime currentTime = LocalDateTime.now();
         Collection<Booking> bookings = switch (bookingState) {
-            case CURRENT ->
-                    bookingRepository.findAllByItemOwnerIdAndStartBeforeAndEndAfterOrderByStartDesc(userId, currentTime, currentTime);
-            case PAST -> bookingRepository.findAllByItemOwnerIdAndEndBeforeOrderByStartDesc(userId, currentTime);
-            case FUTURE -> bookingRepository.findAllByItemOwnerIdAndStartAfterOrderByStartDesc(userId, currentTime);
-            case WAITING ->
-                    bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, BookingStatus.WAITING);
-            case REJECTED ->
-                    bookingRepository.findAllByItemOwnerIdAndStatusOrderByStartDesc(userId, BookingStatus.REJECTED);
-            default -> bookingRepository.findAllByItemOwnerIdOrderByStartDesc(userId);
+            case CURRENT -> bookingRepository.findCurrentItemBookings(userId, currentTime, currentTime);
+            case PAST -> bookingRepository.findPastItemBookings(userId, currentTime);
+            case FUTURE -> bookingRepository.findUpcomingItemBookings(userId, currentTime);
+            case WAITING -> bookingRepository.findItemBookingsByStatus(userId, BookingStatus.WAITING);
+            case REJECTED -> bookingRepository.findItemBookingsByStatus(userId, BookingStatus.REJECTED);
+            default -> bookingRepository.findAllByItemOwnerId(userId);
         };
         log.info("получение списка бронирований всех предметов владельца c id: {}", userId);
         return bookings.stream()
