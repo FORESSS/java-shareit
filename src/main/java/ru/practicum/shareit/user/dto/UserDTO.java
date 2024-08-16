@@ -15,7 +15,7 @@ public class UserDTO {
     @NotBlank
     @Length(max = 50)
     private String name;
-    @NotNull
+    @NotBlank
     @Email
     private String email;
 }
