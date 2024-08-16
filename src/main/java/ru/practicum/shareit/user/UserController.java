@@ -1,49 +1,60 @@
 package ru.practicum.shareit.user;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.user.dto.UserDTO;
-import ru.practicum.shareit.user.dto.UserUpdateDTO;
-import ru.practicum.shareit.user.service.UserService;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.validator.ValidateWhile;
 
 import java.util.Collection;
 
+@Slf4j
 @RestController
-@RequestMapping(path = "/users")
 @RequiredArgsConstructor
+@RequestMapping(path = "/users")
 public class UserController {
+
     private final UserService userService;
 
+
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Collection<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<Collection<UserDto>> getAll() {
+        log.info("Вызов метода GET всех пользователей");
+        return ResponseEntity.ok().body(userService.getAllUsers());
     }
 
-    @GetMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public UserDTO getUserById(@PathVariable @NotNull Long userId) {
-        return userService.getUserById(userId);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getById(@PathVariable long id) {
+        log.info("Вызов GET пользователя с id={}", id);
+        return ResponseEntity.ok().body(userService.getUser(id));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO createUser(@RequestBody @Valid UserDTO user) {
-        return userService.createUser(user);
+    public ResponseEntity<UserDto> create(@RequestBody @Validated(ValidateWhile.Create.class) UserDto user) {
+        log.info("Вызов метода POST пользователя {}", user.getName());
+        UserDto createdUser = userService.saveUser(user);
+        log.info("Пользователь {} с id={} создан", createdUser.getName(), createdUser.getId());
+        return ResponseEntity.ok().body(createdUser);
     }
 
     @PatchMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public UserDTO updateUser(@PathVariable @NotNull Long userId, @RequestBody @Valid UserUpdateDTO user) {
-        return userService.updateUser(userId, user);
+    public ResponseEntity<UserDto> update(@PathVariable long userId,
+                                          @RequestBody @Validated(ValidateWhile.Update.class) UserDto newUser) {
+        log.info("Вызов метода PATCH пользователя: {}", newUser.getName());
+        UserDto updatedUser = userService.updateUser(userId, newUser);
+        log.info("Пользователь {} с id={} обновлен", newUser.getName(), newUser.getId());
+        return ResponseEntity.ok().body(updatedUser);
     }
 
-    @DeleteMapping("/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@PathVariable @NotNull Long userId) {
-        userService.deleteUserById(userId);
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable long id) {
+        log.info("Вызов метода DELETE пользователя с id={}", id);
+        userService.deleteUser(id);
     }
+
+
 }
