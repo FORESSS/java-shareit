@@ -1,16 +1,21 @@
 package ru.practicum.shareit.item.dto;
 
-import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import ru.practicum.shareit.booking.dto.BookingDTO;
+import ru.practicum.shareit.comment.dto.CommentDTO;
+import ru.practicum.shareit.request.model.ItemRequest;
+
+import java.util.Collection;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class ItemDTO {
-    @NotNull
     private long id;
     @NotBlank
     @Length(max = 50)
@@ -19,10 +24,9 @@ public class ItemDTO {
     @Length(max = 200)
     private String description;
     @NotNull
-    @AssertTrue
     private Boolean available;
-    @NotNull
-    private long owner;
-    @NotNull
-    private long request;
+    private ItemRequest request;
+    private Collection<CommentDTO> comments;
+    private BookingDTO lastBooking;
+    private BookingDTO nextBooking;
 }
