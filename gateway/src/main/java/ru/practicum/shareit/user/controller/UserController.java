@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.controller;
+/*package ru.practicum.shareit.user.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -45,4 +45,4 @@ public class UserController {
     public void deleteUser(@PathVariable @NotNull Long userId) {
         userService.deleteUserById(userId);
     }
-}
+}*/

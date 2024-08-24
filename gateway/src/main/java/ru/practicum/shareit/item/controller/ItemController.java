@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.controller;
+/*package ru.practicum.shareit.item.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -67,4 +67,4 @@ public class ItemController {
                                  @Valid @RequestBody Comment comment) {
         return itemService.addComment(userId, itemId, comment);
     }
-}
+}*/
