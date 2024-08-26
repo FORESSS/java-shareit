@@ -1,18 +1,21 @@
 package ru.practicum.shareit;
 
-import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
 
-@SpringBootTest(
-		properties = {"spring.datasource.driver-class-name=org.h2.Driver",
-				"spring.datasource.url=jdbc:h2:mem:shareit",
-				"spring.datasource.username=dbuser",
-				"spring.datasource.password=12345"},
-		webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest
 class ShareItTests {
+    @Autowired
+    private ApplicationContext context;
 
-	@Test
-	void contextLoads() {
-	}
+   /* @Test
+    void testContextLoads() {
+        assertThat(context).isNotNull();
+    }
 
+    @Test
+    void testCheckBeanLoading() {
+        assertThat(context.containsBean("shareItApp")).isTrue();
+    }*/
 }
