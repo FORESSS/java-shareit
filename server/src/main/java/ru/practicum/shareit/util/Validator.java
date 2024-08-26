@@ -11,6 +11,8 @@ import ru.practicum.shareit.exception.PermissionDeniedException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -22,6 +24,7 @@ public class Validator {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
     public void checkUserId(long userId) {
         if (!userRepository.existsById(userId)) {
@@ -48,6 +51,11 @@ public class Validator {
     public Booking validateAndGetBooking(long bookingId) {
         return bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ValidationException(String.format("Бронирование с id: %d не найдено", bookingId)));
+    }
+
+    public ItemRequest validateAndGetItemRequest(long requestId) {
+        return itemRequestRepository.findById(requestId)
+                .orElseThrow(() -> new ValidationException(String.format("Запрос вещи с id: %d не найден", requestId)));
     }
 
     public void checkEmail(String email) {

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDTO;
 import ru.practicum.shareit.booking.dto.BookingDTORequest;
-import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.model.BookingStatus;
@@ -22,6 +22,7 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
+    private final BookingMapper bookingMapper;
     private final Validator validator;
 
     @Override
@@ -38,7 +39,7 @@ public class BookingServiceImpl implements BookingService {
         };
         log.info("Получение списка всех бронирований пользователя с id: {}", userId);
         return bookings.stream()
-                .map(BookingMapper::toBookingDto)
+                .map(bookingMapper::toBookingDto)
                 .toList();
     }
 
@@ -48,7 +49,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = validator.validateAndGetBooking(bookingId);
         validator.checkBooker(userId, booking, booking.getItem());
         log.info("Получение бронирования с id: {} пользователя c id: {}", bookingId, userId);
-        return BookingMapper.toBookingDto(booking);
+        return bookingMapper.toBookingDto(booking);
     }
 
     @Override
@@ -65,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
         };
         log.info("получение списка бронирований всех предметов владельца c id: {}", userId);
         return bookings.stream()
-                .map(BookingMapper::toBookingDto)
+                .map(bookingMapper::toBookingDto)
                 .toList();
     }
 
@@ -74,8 +75,8 @@ public class BookingServiceImpl implements BookingService {
         User booker = validator.validateAndGetUser(userId);
         Item item = validator.validateAndGetItem(bookingDtoRequest.getItemId());
         validator.validateItemAvailability(item);
-        Booking booking = BookingMapper.toBookingFromBookingRequest(bookingDtoRequest, item, booker, BookingStatus.WAITING);
-        BookingDTO bookingDTO = BookingMapper.toBookingDto(bookingRepository.save(booking));
+        Booking booking = bookingMapper.bookingDTORequestToBooking(bookingDtoRequest, item, booker, BookingStatus.WAITING);
+        BookingDTO bookingDTO = bookingMapper.toBookingDto(bookingRepository.save(booking));
         log.info("Создание нового бронирования с id: {} пользователя с id: {}", booking.getId(), userId);
         return bookingDTO;
     }
@@ -91,6 +92,6 @@ public class BookingServiceImpl implements BookingService {
         } else {
             log.info("Бронирование с id {} было отклонено", bookingId);
         }
-        return BookingMapper.toBookingDto(booking);
+        return bookingMapper.toBookingDto(booking);
     }
 }

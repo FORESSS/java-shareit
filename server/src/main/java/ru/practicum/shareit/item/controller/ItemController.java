@@ -1,8 +1,5 @@
 package ru.practicum.shareit.item.controller;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -22,13 +19,13 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Collection<ItemDTO> getAllItems(@RequestHeader(USER_ID_HEADER) @Positive long userId) {
+    public Collection<ItemDTO> getAllItems(@RequestHeader(USER_ID_HEADER) long userId) {
         return itemService.getAllItems(userId);
     }
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDTO getItemById(@PathVariable @NonNull Long itemId) {
+    public ItemDTO getItemById(@PathVariable long itemId) {
         return itemService.getItemById(itemId);
     }
 
@@ -40,8 +37,8 @@ public class ItemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemDTO createItem(@RequestHeader(USER_ID_HEADER) @Positive long userId,
-                              @RequestBody @Valid ItemDTO itemDto) {
+    public ItemDTO createItem(@RequestHeader(USER_ID_HEADER) long userId,
+                              @RequestBody ItemDTO itemDto) {
         return itemService.createItem(userId, itemDto);
     }
 
@@ -55,8 +52,8 @@ public class ItemController {
 
     @DeleteMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteItem(@RequestHeader(USER_ID_HEADER) @Positive long userId,
-                           @PathVariable @Positive long itemId) {
+    public void deleteItem(@RequestHeader(USER_ID_HEADER) long userId,
+                           @PathVariable long itemId) {
         itemService.deleteItem(userId, itemId);
     }
 
@@ -64,7 +61,7 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public CommentDTO addComment(@PathVariable long itemId,
                                  @RequestHeader(USER_ID_HEADER) long userId,
-                                 @Valid @RequestBody Comment comment) {
+                                 @RequestBody Comment comment) {
         return itemService.addComment(userId, itemId, comment);
     }
 }

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dto.UserDTO;
-import ru.practicum.shareit.user.dto.UserMapper;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.util.Validator;
@@ -16,13 +16,14 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
     private final Validator validator;
 
     @Override
     public Collection<UserDTO> getAllUsers() {
         log.info("Получение списка всех пользователей");
         return userRepository.findAll().stream()
-                .map(UserMapper::toUserDto)
+                .map(userMapper::toUserDto)
                 .toList();
     }
 
@@ -30,16 +31,16 @@ public class UserServiceImpl implements UserService {
     public UserDTO getUserById(long userId) {
         User user = validator.validateAndGetUser(userId);
         log.info("Получение пользователя с id: {}", userId);
-        return UserMapper.toUserDto(user);
+        return userMapper.toUserDto(user);
     }
 
     @Override
     public UserDTO createUser(UserDTO userDto) {
         validator.checkEmail(userDto.getEmail());
-        User user = UserMapper.toUser(userDto);
+        User user = userMapper.toUser(userDto);
         userRepository.save(user);
         log.info("Создание нового пользователя с id: {}", user.getId());
-        return UserMapper.toUserDto(user);
+        return userMapper.toUserDto(user);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.save(user);
         log.info("Обновление пользователя с id: {}", userId);
-        return UserMapper.toUserDto(user);
+        return userMapper.toUserDto(user);
     }
 
     @Override

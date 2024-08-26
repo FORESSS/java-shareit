@@ -4,11 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.comment.dto.CommentDTO;
-import ru.practicum.shareit.comment.dto.CommentMapper;
+import ru.practicum.shareit.comment.mapper.CommentMapper;
 import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.comment.repository.CommentRepository;
 import ru.practicum.shareit.item.dto.ItemDTO;
-import ru.practicum.shareit.item.dto.ItemMapper;
+import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
@@ -25,6 +25,8 @@ import java.util.Optional;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final CommentRepository commentRepository;
+    private final ItemMapper itemMapper;
+    private final CommentMapper commentMapper;
     private final Validator validator;
 
     @Override
@@ -32,16 +34,16 @@ public class ItemServiceImpl implements ItemService {
         validator.checkUserId(userId);
         log.info("Получение списка всех предметов пользователя с id: {}", userId);
         return itemRepository.findAllByOwnerId(userId).stream()
-                .map(ItemMapper::toItemDto)
+                .map(itemMapper::toItemDto)
                 .toList();
     }
 
     @Override
     public ItemDTO getItemById(long itemId) {
         Item item = validator.validateAndGetItem(itemId);
-        ItemDTO itemDto = ItemMapper.toItemDto(item);
+        ItemDTO itemDto = itemMapper.toItemDto(item);
         itemDto.setComments(commentRepository.findAllByItemId(itemId).stream()
-                .map(CommentMapper::toCommentDto)
+                .map(commentMapper::toCommentDto)
                 .toList());
         log.info("Получение предмета с id: {}", itemId);
         return itemDto;
@@ -55,18 +57,18 @@ public class ItemServiceImpl implements ItemService {
         log.info("Поиск предметов по тексту: {}", text);
         return itemRepository.searchByNameOrDescription(text)
                 .stream()
-                .map(ItemMapper::toItemDto)
+                .map(itemMapper::toItemDto)
                 .toList();
     }
 
     @Override
     public ItemDTO createItem(long userId, ItemDTO itemDto) {
         User user = validator.validateAndGetUser(userId);
-        Item item = ItemMapper.toItem(itemDto);
+        Item item = itemMapper.toItem(itemDto);
         item.setOwner(user);
         itemRepository.save(item);
         log.info("Создание нового предмета с id: {} пользователя с id: {}", item.getId(), userId);
-        return ItemMapper.toItemDto(item);
+        return itemMapper.toItemDto(item);
     }
 
     @Override
@@ -78,7 +80,7 @@ public class ItemServiceImpl implements ItemService {
         Optional.ofNullable(newItemDto.getAvailable()).ifPresent(item::setAvailable);
         itemRepository.save(item);
         log.info("Обновление предмета с id: {} пользователя с id: {}", itemId, userId);
-        return ItemMapper.toItemDto(item);
+        return itemMapper.toItemDto(item);
     }
 
     @Override
@@ -99,6 +101,6 @@ public class ItemServiceImpl implements ItemService {
         comment.setAuthor(author);
         commentRepository.save(comment);
         log.info("Добавлен комментарий к предмету с id: {} пользователя с id: {}", itemId, userId);
-        return CommentMapper.toCommentDto(comment);
+        return commentMapper.toCommentDto(comment);
     }
 }

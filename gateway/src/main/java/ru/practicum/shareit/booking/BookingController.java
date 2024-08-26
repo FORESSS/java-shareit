@@ -1,55 +1,52 @@
 package ru.practicum.shareit.booking;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import ru.practicum.shareit.booking.dto.BookItemRequestDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.dto.BookingState;
 
 
-@Controller
-@RequestMapping(path = "/bookings")
+/**
+ * TODO Sprint add-bookings.
+ */
+@RestController
 @RequiredArgsConstructor
-@Slf4j
-@Validated
+@RequestMapping(path = "/bookings")
 public class BookingController {
-	private final BookingClient bookingClient;
+    private final BookingClient bookingClient;
+    private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
-	@GetMapping
-	public ResponseEntity<Object> getBookings(@RequestHeader("X-Sharer-User-Id") long userId,
-			@RequestParam(name = "state", defaultValue = "all") String stateParam,
-			@PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
-			@Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
-		BookingState state = BookingState.from(stateParam)
-				.orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
-		log.info("Get booking with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
-		return bookingClient.getBookings(userId, state, from, size);
-	}
+    @PostMapping
+    public ResponseEntity<Object> create(@RequestBody @Valid BookingDtoRequest bookingDtoRequest,
+                                         @RequestHeader(USER_ID_HEADER) int bookerId) {
+        return bookingClient.create(bookingDtoRequest, bookerId);
+    }
 
-	@PostMapping
-	public ResponseEntity<Object> bookItem(@RequestHeader("X-Sharer-User-Id") long userId,
-			@RequestBody @Valid BookItemRequestDto requestDto) {
-		log.info("Creating booking {}, userId={}", requestDto, userId);
-		return bookingClient.bookItem(userId, requestDto);
-	}
+    @PatchMapping("/{bookingId}")
+    public ResponseEntity<Object> approve(@RequestHeader(USER_ID_HEADER) int userId,
+                              @PathVariable int bookingId,
+                              @RequestParam boolean approved) {
+        return bookingClient.setApproved(userId, bookingId, approved);
+    }
 
-	@GetMapping("/{bookingId}")
-	public ResponseEntity<Object> getBooking(@RequestHeader("X-Sharer-User-Id") long userId,
-			@PathVariable Long bookingId) {
-		log.info("Get booking {}, userId={}", bookingId, userId);
-		return bookingClient.getBooking(userId, bookingId);
-	}
+
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<Object> get(@PathVariable int bookingId,
+                          @RequestHeader(USER_ID_HEADER) int userId) {
+        return bookingClient.get(bookingId, userId);
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> getAll(@RequestHeader(USER_ID_HEADER) int userId,
+                                   @RequestParam(name = "state", defaultValue = "ALL") BookingState bookingState) {
+        return bookingClient.getBookings(userId, bookingState);
+    }
+
+    @GetMapping("/owner")
+    public ResponseEntity<Object> getAllByOwner(@RequestHeader(USER_ID_HEADER) int userId,
+                                       @RequestParam(name = "state", defaultValue = "ALL") BookingState bookingState) {
+        return bookingClient.getAllByOwner(userId, bookingState);
+    }
 }
