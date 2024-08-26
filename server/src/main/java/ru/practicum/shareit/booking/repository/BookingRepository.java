@@ -3,44 +3,128 @@ package ru.practicum.shareit.booking.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.booking.model.Status;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
-@Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    @Query("SELECT b FROM Booking b WHERE b.booker.id = :bookerId")
-    Collection<Booking> findAllByBookerId(@Param("bookerId") long bookerId);
 
-    @Query("SELECT b FROM Booking b WHERE b.booker.id = :bookerId AND b.start < :cur AND b.end > :cur2 ORDER BY b.start DESC")
-    Collection<Booking> findCurrentBookings(@Param("bookerId") long bookerId, @Param("cur") LocalDateTime cur, @Param("cur2") LocalDateTime cur2);
+    List<Booking> findByBookerId(long bookerId);
 
-    @Query("SELECT b FROM Booking b WHERE b.booker.id = :bookerId AND b.end < :cur ORDER BY b.start DESC")
-    Collection<Booking> findPastBookings(@Param("bookerId") long bookerId, @Param("cur") LocalDateTime cur);
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "join i.owner as o " +
+            "where b.id = :bookerId and bk.end < :now " +
+            "group by bk.start " +
+            "order by bk.start desc ")
+    List<Booking> findAllBookingByBookerAndPast(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
 
-    @Query("SELECT b FROM Booking b WHERE b.booker.id = :bookerId AND b.start > :cur ORDER BY b.start DESC")
-    Collection<Booking> findUpcomingBookings(@Param("bookerId") long bookerId, @Param("cur") LocalDateTime cur);
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "join i.owner as o " +
+            "where b.id = :bookerId and bk.start > :now " +
+            "group by bk.start " +
+            "order by bk.start desc ")
+    List<Booking> findAllBookingByBookerAndFuture(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
 
-    @Query("SELECT b FROM Booking b WHERE b.booker.id = :bookerId AND b.status = :status ORDER BY b.start DESC")
-    Collection<Booking> findBookingsByStatus(@Param("bookerId") long bookerId, @Param("status") BookingStatus status);
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "join i.owner as o " +
+            "where b.id = :bookerId and bk.start < :now and bk.end > :now " +
+            "group by bk.start " +
+            "order by bk.start desc ")
+    List<Booking> findAllBookingByBookerAndCurrent(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
 
-    @Query("SELECT b FROM Booking b WHERE b.item.owner.id = :ownerId ORDER BY b.start DESC")
-    Collection<Booking> findAllByItemOwnerId(@Param("ownerId") long ownerId);
+    List<Booking> findByBooker_idAndStatus(long bookerId, String status);
 
-    @Query("SELECT b FROM Booking b WHERE b.item.owner.id = :ownerId AND b.start < :cur AND b.end > :cur2 ORDER BY b.start DESC")
-    Collection<Booking> findCurrentItemBookings(@Param("ownerId") long ownerId, @Param("cur") LocalDateTime cur, @Param("cur2") LocalDateTime cur2);
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "join i.owner as o " +
+            "where o.id = :ownerId and bk.end < :now " +
+            "group by bk.start " +
+            "order by bk.start desc ")
+    List<Booking> findAllBookingByOwnerAndPast(@Param("ownerId")long ownerId, @Param("now") LocalDateTime now);
 
-    @Query("SELECT b FROM Booking b WHERE b.item.owner.id = :ownerId AND b.end < :cur ORDER BY b.start DESC")
-    Collection<Booking> findPastItemBookings(@Param("ownerId") long ownerId, @Param("cur") LocalDateTime cur);
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "join i.owner as o " +
+            "where o.id = :ownerId and bk.start > :now " +
+            "group by bk.start " +
+            "order by bk.start desc ")
+    List<Booking> findAllBookingByOwnerAndFuture(@Param("ownerId")long ownerId, @Param("now") LocalDateTime now);
 
-    @Query("SELECT b FROM Booking b WHERE b.item.owner.id = :ownerId AND b.start > :cur ORDER BY b.start DESC")
-    Collection<Booking> findUpcomingItemBookings(@Param("ownerId") long ownerId, @Param("cur") LocalDateTime cur);
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "join i.owner as o " +
+            "where o.id = :ownerId and bk.start < :now and bk.end > :now " +
+            "group by bk.start " +
+            "order by bk.start desc ")
+    List<Booking> findAllBookingByOwnerAndCurrent(@Param("ownerId")long ownerId, @Param("now") LocalDateTime now);
 
-    @Query("SELECT b FROM Booking b WHERE b.item.owner.id = :ownerId AND b.status = :status ORDER BY b.start DESC")
-    Collection<Booking> findItemBookingsByStatus(@Param("ownerId") long ownerId, @Param("status") BookingStatus status);
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "join i.owner as o " +
+            "where o.id = :ownerId and bk.status = :status " +
+            "group by bk.start " +
+            "order by bk.start desc ")
+    List<Booking> findAllBookingByOwnerAndStatus(@Param("ownerId")long ownerId, @Param("status") String status);
 
-    boolean existsByBookerIdAndEndBeforeAndStatusNot(long bookerId, LocalDateTime end, BookingStatus status);
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "join i.owner as o " +
+            "where o.id = :ownerId " +
+            "group by bk.start " +
+            "order by bk.start desc ")
+    List<Booking> findAllBookingByOwner(@Param("ownerId") long ownerId);
+
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "where i.id = :itemId ")
+    Booking findByItemId(@Param("itemId") long itemId);
+
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "where i.id = :itemId and bk.end < :now and bk.status = :status ")
+    Booking findByItemIdPast(@Param("itemId") long itemId,
+                             @Param("now") LocalDateTime now,
+                             @Param("status") Status status);
+
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "where i.id = :itemId and bk.start > :now and bk.status = :status ")
+    Booking findByItemIdFuture(@Param("itemId") long itemId,
+                               @Param("now") LocalDateTime now,
+                               @Param("status") Status status);
+
+    @Query("select bk " +
+            "from Booking as bk " +
+            "join bk.item as i " +
+            "join bk.booker as b " +
+            "where b.id = :userId and bk.end < :now ")
+    Optional<Booking> findByUserId(@Param("userId") long userId, @Param("now") LocalDateTime now);
 }

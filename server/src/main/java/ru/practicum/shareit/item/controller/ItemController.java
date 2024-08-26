@@ -1,67 +1,63 @@
 package ru.practicum.shareit.item.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.comment.dto.CommentDTO;
-import ru.practicum.shareit.comment.model.Comment;
-import ru.practicum.shareit.item.dto.ItemDTO;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemWithDateDto;
 import ru.practicum.shareit.item.service.ItemService;
 
-import java.util.Collection;
+import java.util.List;
 
+import static ru.practicum.shareit.booking.controller.BookingController.USER_ID;
+
+@Slf4j
 @RestController
-@RequestMapping("/items")
 @RequiredArgsConstructor
+@RequestMapping("items")
 public class ItemController {
     private final ItemService itemService;
-    private static final String USER_ID_HEADER = "X-Sharer-User-Id";
-
-    @GetMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Collection<ItemDTO> getAllItems(@RequestHeader(USER_ID_HEADER) long userId) {
-        return itemService.getAllItems(userId);
-    }
-
-    @GetMapping("/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ItemDTO getItemById(@PathVariable long itemId) {
-        return itemService.getItemById(itemId);
-    }
-
-    @GetMapping("/search")
-    @ResponseStatus(HttpStatus.OK)
-    public Collection<ItemDTO> searchItems(@RequestParam("text") String text) {
-        return itemService.searchItems(text);
-    }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ItemDTO createItem(@RequestHeader(USER_ID_HEADER) long userId,
-                              @RequestBody ItemDTO itemDto) {
-        return itemService.createItem(userId, itemDto);
-    }
-
-    @PatchMapping("/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
-    public ItemDTO updateItem(@RequestHeader(USER_ID_HEADER) long userId,
-                              @PathVariable long itemId,
-                              @RequestBody ItemDTO itemDTO) {
-        return itemService.updateItem(userId, itemId, itemDTO);
-    }
-
-    @DeleteMapping("/{itemId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void deleteItem(@RequestHeader(USER_ID_HEADER) long userId,
-                           @PathVariable long itemId) {
-        itemService.deleteItem(userId, itemId);
+    public ItemDto createItem(@RequestBody ItemDto item, @RequestHeader(USER_ID) long ownerId) {
+        log.info("Получен POST запрос на создание предмета {} пользователем с ownerId = {}", item, ownerId);
+        return itemService.createItem(item, ownerId);
     }
 
     @PostMapping("/{itemId}/comment")
-    @ResponseStatus(HttpStatus.OK)
-    public CommentDTO addComment(@PathVariable long itemId,
-                                 @RequestHeader(USER_ID_HEADER) long userId,
-                                 @RequestBody Comment comment) {
-        return itemService.addComment(userId, itemId, comment);
+    public CommentDto createComment(@RequestBody CommentDto comment,
+                                    @PathVariable long itemId,
+                                    @RequestHeader(USER_ID) long userId) {
+        log.info("Получен POST запрос на создание комментария {} на предмет с itemId = {} от пользователя " +
+                "с userId = {}", comment, itemId, userId);
+        return itemService.createComment(comment, itemId, userId);
+    }
+
+    @PatchMapping("/{itemId}")
+    public ItemDto update(@RequestBody ItemDto newItem,
+                          @PathVariable long itemId,
+                          @RequestHeader(USER_ID) long ownerId) {
+        log.info("Получен PATCH запрос на обновление предмета с itemId = {} от пользователя с ownerId = {}, " +
+                "поля, которые нужно обновить: {}", itemId, ownerId, newItem);
+        return itemService.update(newItem, itemId, ownerId);
+    }
+
+    @GetMapping("/{itemId}")
+    public ItemDto findById(@PathVariable long itemId) {
+        log.info("Получен GET запрос на получение предмета с itemId = {}", itemId);
+        return itemService.findById(itemId);
+    }
+
+    @GetMapping
+    public List<ItemWithDateDto> findByOwnerId(@RequestHeader(USER_ID) long ownerId) {
+        log.info("Получен GET запрос на получение всех предметов пользователя с ownerId = {}", ownerId);
+        return itemService.findByOwnerId(ownerId);
+    }
+
+    @GetMapping("/search")
+    public List<ItemDto> searchByText(@RequestParam(defaultValue = "") String text) {
+        log.info("Получен GET запрос на получение предмета по поиску text = {}", text);
+        return itemService.searchByText(text);
     }
 }
