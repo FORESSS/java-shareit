@@ -44,19 +44,15 @@ public class ItemServiceImpl implements ItemService {
     private final Validator validator;
 
     @Override
-    public ItemDto createItem(ItemDto itemDto, long ownerId) {
-        log.info("Начало процесса создания предмета с ownerId = {}", ownerId);
-        User user = validator.validateAndGetUser(ownerId);
-        ItemRequest itemRequest = validator.validateAndGetItemRequest(itemDto.getRequestId());
-
-
+    public ItemDto createItem(ItemDto itemDto, long userId) {
+        User user = validator.validateAndGetUser(userId);
         Item item = itemMapper.itemDtoToItem(itemDto);
         item.setOwner(user);
-        item.setRequest(itemRequest);
-        item = itemRepository.save(item);
-        log.info("Предмет создан");
+        itemRepository.save(item);
+        log.info("Создание нового предмета с id: {} пользователя с id: {}", item.getId(), userId);
         return itemMapper.itemToItemDto(item);
     }
+
 
     @Override
     public CommentDto createComment(CommentDto newComment, long itemId, long userId) {
