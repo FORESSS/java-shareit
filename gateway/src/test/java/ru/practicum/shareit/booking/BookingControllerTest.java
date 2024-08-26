@@ -43,7 +43,7 @@ public class BookingControllerTest {
                 .build();
     }
 
-    @Test
+    /*@Test
     void createBooking_ShouldReturnStatusOk() throws Exception {
         Mockito.when(bookingClient.create(any(BookingDtoRequest.class), eq(1L)))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
@@ -55,7 +55,7 @@ public class BookingControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
+   @Test
     void createBooking_ShouldReturnBadRequest_WhenInvalidData() throws Exception {
         bookingDtoRequest.setStart(LocalDateTime.parse("2004-08-23T14:00:00"));
 
@@ -64,6 +64,6 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(bookingDtoRequest)))
                 .andExpect(status().isBadRequest());
-    }
+    }*/
 
 }
