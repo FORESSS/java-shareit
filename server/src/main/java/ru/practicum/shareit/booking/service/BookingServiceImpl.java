@@ -66,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
         if (booking.getItem().getOwner().getId() == ownerId) {
             booking.setStatus(approved ? Status.APPROVED : Status.REJECTED);
         } else {
-            throw new PermissionDeniedException("У вас нет доступа к этой информации");
+            throw new ValidationException("У вас нет доступа к этой информации");
         }
 
         log.info("Статус бронирования изменен на approved = {}", approved);
