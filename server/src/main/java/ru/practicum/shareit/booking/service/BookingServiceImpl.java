@@ -11,7 +11,6 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exception.PermissionDeniedException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -97,7 +96,8 @@ public class BookingServiceImpl implements BookingService {
         switch (state) {
             case ALL -> bookings = bookingRepository.findByBookerId(bookerId);
             case PAST -> bookings = bookingRepository.findAllBookingByBookerAndPast(bookerId, LocalDateTime.now());
-            case CURRENT -> bookings = bookingRepository.findAllBookingByBookerAndCurrent(bookerId, LocalDateTime.now());
+            case CURRENT ->
+                    bookings = bookingRepository.findAllBookingByBookerAndCurrent(bookerId, LocalDateTime.now());
             case FUTURE -> bookings = bookingRepository.findAllBookingByBookerAndFuture(bookerId, LocalDateTime.now());
             case WAITING -> bookings = bookingRepository.findByBooker_idAndStatus(bookerId, Status.WAITING.name());
             case REJECTED -> bookings = bookingRepository.findByBooker_idAndStatus(bookerId, Status.REJECTED.name());
