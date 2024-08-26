@@ -80,7 +80,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = validator.validateAndGetBooking(id);
 
         if (booking.getItem().getOwner().getId() != userId && booking.getBooker().getId() != userId) {
-            throw new PermissionDeniedException("У вас нет доступа к этой информации");
+            throw new ValidationException("У вас нет доступа к этой информации");
         }
 
         log.info("Бронирование получено");
