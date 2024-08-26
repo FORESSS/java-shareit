@@ -1,21 +1,14 @@
 package ru.practicum.shareit.request.model;
-
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import ru.practicum.shareit.user.model.User;
-
 import java.time.LocalDateTime;
-
-/**
- * TODO Sprint add-item-requests.
- */
 @Entity
 @Table(name = "item_requests")
 @Setter
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class ItemRequest {

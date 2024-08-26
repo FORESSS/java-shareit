@@ -2,13 +2,18 @@ package ru.practicum.shareit.booking;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 
 import java.time.LocalDateTime;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BookingController.class)
 public class BookingControllerTest {
@@ -33,7 +38,7 @@ public class BookingControllerTest {
                 .build();
     }
 
-    /*@Test
+  /*  @Test
     void createBooking_ShouldReturnStatusOk() throws Exception {
         Mockito.when(bookingClient.create(any(BookingDtoRequest.class), eq(1L)))
                 .thenReturn(new ResponseEntity<>(HttpStatus.OK));
@@ -43,9 +48,9 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(bookingDtoRequest)))
                 .andExpect(status().isOk());
-    }
+    }*/
 
-   @Test
+    @Test
     void createBooking_ShouldReturnBadRequest_WhenInvalidData() throws Exception {
         bookingDtoRequest.setStart(LocalDateTime.parse("2004-08-23T14:00:00"));
 
@@ -54,6 +59,6 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(bookingDtoRequest)))
                 .andExpect(status().isBadRequest());
-    }*/
+    }
 
 }
