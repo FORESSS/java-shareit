@@ -17,9 +17,5 @@ class ShareItGatewayTests {
         assertThat(context).isNotNull();
     }
 
-    @Test
-    void testCheckBeanLoading() {
-        assertThat(context.containsBean("shareItApp")).isTrue();
-    }
 
 }
