@@ -8,6 +8,7 @@ import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.exception.InvalidCommentException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
@@ -119,7 +120,7 @@ public class ItemServiceImpl implements ItemService {
         Item item = validator.validateAndGetItem(itemId);
         if (bookingRepository.findByUserId(userId, LocalDateTime.now()).isEmpty()) {
             System.out.println(LocalDateTime.now());
-            throw new ValidationException("Данный пользователь не использовал эту вещь, время : " + LocalDateTime.now());
+            throw new InvalidCommentException("Данный пользователь не использовал эту вещь, время : " + LocalDateTime.now());
         }
         Comment comment = commentMapper.commentDtoToComment(newComment);
         comment.setItem(item);
@@ -134,7 +135,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto updateItem(long ownerId, long itemId, ItemDto newItem) {
         validator.checkUserId(ownerId);
         Item item = validator.validateAndGetItem(itemId);
-       // validator.checkItemOwner(ownerId, item);
+        validator.checkItemOwner(ownerId, item);
         if (newItem.getName() != null && !newItem.getName().isBlank()) {
             item.setName(newItem.getName());
         }
