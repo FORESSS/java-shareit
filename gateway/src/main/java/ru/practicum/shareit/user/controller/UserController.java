@@ -28,14 +28,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@Valid @RequestBody UserDto user) {
-
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<Object> createUser(@RequestBody @Valid UserDto user) {
         return userClient.createUser(user);
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<Object> update(@RequestBody UserDto newUser, @PathVariable long userId) {
-
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> updateUser(@PathVariable @Positive long userId,
+                                             @RequestBody UserDto newUser) {
         return userClient.updateUser(userId, newUser);
     }
 
