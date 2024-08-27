@@ -24,23 +24,23 @@ public class UserClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> findAllUsers() {
-        return get("");
-    }
-
-    public ResponseEntity<Object> findUserById(long userId) {
+    public ResponseEntity<Object> findById(long userId) {
         return get("/" + userId);
     }
 
-    public ResponseEntity<Object> createUser(UserDto user) {
+    public ResponseEntity<Object> findAll() {
+        return get("");
+    }
+
+    public ResponseEntity<Object> create(UserDto user) {
         return post("", user);
     }
 
-    public ResponseEntity<Object> updateUser(long userId, UserDto newUser) {
+    public ResponseEntity<Object> update(long userId, UserDto newUser) {
         return patch("/" + userId, newUser);
     }
 
-    public ResponseEntity<Object> deleteUser(long userId) {
+    public ResponseEntity<Object> delete(long userId) {
         return delete("/" + userId);
     }
 }

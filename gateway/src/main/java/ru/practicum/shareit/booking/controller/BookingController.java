@@ -1,49 +1,60 @@
 package ru.practicum.shareit.booking.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.RequestBookingDto;
 import ru.practicum.shareit.booking.dto.State;
 import ru.practicum.shareit.booking.service.BookingClient;
 
-import static ru.practicum.shareit.util.Constants.USER_ID;
+import static ru.practicum.shareit.constants.Constants.USER_ID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("bookings")
 public class BookingController {
     private final BookingClient bookingClient;
 
-    @GetMapping("/{bookingId}")
-    public ResponseEntity<Object> findBookingById(@RequestHeader(USER_ID) @Positive long userId,
-                                                  @PathVariable @Positive long bookingId) {
-        return bookingClient.findBookingById(userId, bookingId);
-    }
-
-    @GetMapping
-    public ResponseEntity<Object> findBookingsByBooker(@RequestHeader(USER_ID) @Positive long bookerId,
-                                                       @RequestParam(defaultValue = "ALL") State state) {
-        return bookingClient.findBookingsByBooker(bookerId, state);
-    }
-
-    @GetMapping("/owner")
-    public ResponseEntity<Object> findBookingsByOwner(@RequestHeader(USER_ID) @Positive long ownerId,
-                                                      @RequestParam(defaultValue = "ALL") State state) {
-        return bookingClient.findBookingsByOwner(ownerId, state);
-    }
-
     @PostMapping
-    public ResponseEntity<Object> createBooking(@RequestHeader(USER_ID) @Positive long userId,
-                                                @RequestBody @Valid RequestBookingDto booking) {
-        return bookingClient.createBooking(userId, booking);
+    public ResponseEntity<Object> create(@Valid @RequestBody RequestBookingDto booking,
+                                         @RequestHeader(USER_ID) long userId) {
+        log.info("Получен POST запрос на создание бронирования {} пользователем с id = {}", booking, userId);
+        return bookingClient.create(userId, booking);
     }
 
     @PatchMapping("/{bookingId}")
-    public ResponseEntity<Object> updateBooking(@RequestHeader(USER_ID) @Positive long ownerId,
-                                                @PathVariable @Positive long bookingId, @RequestParam boolean approved) {
-        return bookingClient.updateBooking(ownerId, bookingId, approved);
+    public ResponseEntity<Object> update(@PathVariable long bookingId,
+                                         @RequestHeader(USER_ID) long ownerId,
+                                         @RequestParam boolean approved) {
+        log.info("Получен PATCH запрос на подтверждение или отклонение запроса с bookingId = {} на бронирование " +
+                "от владельца с ownerId = {}, статус подтверждения: {}", bookingId, ownerId, approved);
+        return bookingClient.update(ownerId, bookingId, approved);
+    }
+
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<Object> findById(@PathVariable long bookingId,
+                                           @RequestHeader(USER_ID) long userId) {
+        log.info("Получен GET запрос на получение бронирования с bookingId = {}, от пользователя с id = {}",
+                bookingId, userId);
+        return bookingClient.findById(userId, bookingId);
+    }
+
+    @GetMapping
+    public ResponseEntity<Object> findByBooker(@RequestHeader(USER_ID) long bookerId,
+                                               @RequestParam(defaultValue = "ALL") State state) {
+        log.info("Получен GET запрос на получение всех бронирований текущего пользователя с bookerId = {}, state = {}",
+                bookerId, state);
+        return bookingClient.findByBooker(bookerId, state);
+    }
+
+    @GetMapping("/owner")
+    public ResponseEntity<Object> findByOwner(@RequestHeader(USER_ID) long ownerId,
+                                              @RequestParam(defaultValue = "ALL") State state) {
+        log.info("Получен GET запрос на получение списка бронирований для всех вещей текущего пользователя " +
+                        "с ownerId = {}, state = {}", ownerId, state);
+        return bookingClient.findByOwner(ownerId, state);
     }
 }
