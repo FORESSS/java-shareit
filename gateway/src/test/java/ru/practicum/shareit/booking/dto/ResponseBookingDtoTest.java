@@ -9,7 +9,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static ru.practicum.shareit.constants.Constants.LOCAL_DATE_TIME;
+import static ru.practicum.shareit.util.Constants.LOCAL_DATE_TIME;
 
 @JsonTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

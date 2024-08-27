@@ -27,18 +27,17 @@ public class ItemClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> findByOwnerId(long userId) {
+    public ResponseEntity<Object> findItemById(long itemId) {
+        return get("/" + itemId);
+    }
+
+    public ResponseEntity<Object> findItemsByOwnerId(long userId) {
         return get("", userId);
     }
 
-
-    public ResponseEntity<Object> searchByText(long userId, String text) {
+    public ResponseEntity<Object> searchItemByText(long userId, String text) {
         Map<String, Object> parameters = Map.of("text", text);
         return get("/search?text={text}", userId, parameters);
-    }
-
-    public ResponseEntity<Object> findById(long itemId) {
-        return get("/" + itemId);
     }
 
     public ResponseEntity<Object> createItem(long userId, ItemDto item) {
@@ -49,7 +48,7 @@ public class ItemClient extends BaseClient {
         return post("/" + itemId + "/comment", userId, comment);
     }
 
-    public ResponseEntity<Object> update(long userId, long itemId, ItemDto newItem) {
+    public ResponseEntity<Object> updateItem(long userId, long itemId, ItemDto newItem) {
         return patch("/" + itemId, userId, newItem);
     }
 }
