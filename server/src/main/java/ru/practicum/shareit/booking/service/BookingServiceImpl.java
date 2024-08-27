@@ -46,7 +46,7 @@ public class BookingServiceImpl implements BookingService {
         Item item = validator.validateAndGetItem(creatingBooking.getItemId());
 
         if (!item.getAvailable()) {
-            throw new ValidationException("Предмет недоступен для бронирования");
+            throw new InvalidCommentException("Предмет недоступен для бронирования");
         }
 
         Booking booking = bookingMapper.requestBookingDtoToBooking(creatingBooking);
@@ -111,8 +111,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(readOnly = true)
     @Override
     public Collection<ResponseBookingDto> getBookingsByOwner(long ownerId, State state) {
-        log.info("Начало процесса получения списка всех бронирований вещей пользователя с ownerId = {}, " +
-                "со статусом state = {}", ownerId, state);
+
         Collection<Booking> bookings = switch (state) {
 
             case PAST -> bookingRepository.findAllBookingByOwnerAndPast(ownerId, LocalDateTime.now());
@@ -125,7 +124,7 @@ public class BookingServiceImpl implements BookingService {
         };
 
         if (bookings.isEmpty()) {
-            throw new ValidationException("Список пустой");
+            throw new InvalidCommentException("Список пустой");
         }
 
         log.info("Список бронирований вещей пользователя получен");
