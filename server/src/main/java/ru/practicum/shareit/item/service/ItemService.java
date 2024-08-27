@@ -4,18 +4,18 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemWithDateDto;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface ItemService {
-    ItemDto createItem(ItemDto item, long userId);
+    ItemDto getItemById(long itemId);
 
-    CommentDto createComment(CommentDto comment, long itemId, long userId);
+    Collection<ItemWithDateDto> getItemsByOwnerId(long ownerId);
 
-    ItemDto update(ItemDto itemDto, long id, long ownerId);
+    Collection<ItemDto> searchByText(String text);
 
-    ItemDto findById(long id);
+    ItemDto createItem(long userId, ItemDto item);
 
-    List<ItemWithDateDto> findByOwnerId(long ownerId);
+    CommentDto createComment(long userId, long itemId, CommentDto comment);
 
-    List<ItemDto> searchByText(String text);
+    ItemDto updateItem(long ownerId, long itemId, ItemDto itemDto);
 }

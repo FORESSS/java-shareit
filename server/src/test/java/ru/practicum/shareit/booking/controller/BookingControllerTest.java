@@ -63,7 +63,7 @@ class BookingControllerTest {
 
     @Test
     void create() throws Exception {
-        when(bookingService.create(requestBookingDto, 1L))
+        when(bookingService.createBooking(requestBookingDto, 1L))
                 .thenReturn(responseBookingDto);
 
         mvc.perform(post("/bookings")
@@ -80,7 +80,7 @@ class BookingControllerTest {
 
     @Test
     void update() throws Exception {
-        when(bookingService.update(anyLong(), anyLong(), anyBoolean()))
+        when(bookingService.updateBooking(anyLong(), anyLong(), anyBoolean()))
                 .thenReturn(responseBookingDto);
 
         mvc.perform(patch("/bookings/1?approved=true")
@@ -96,7 +96,7 @@ class BookingControllerTest {
 
     @Test
     void findById() throws Exception {
-        when(bookingService.findById(anyLong(), anyLong()))
+        when(bookingService.getBookingById(anyLong(), anyLong()))
                 .thenReturn(responseBookingDto);
 
         mvc.perform(get("/bookings/1")
@@ -122,7 +122,7 @@ class BookingControllerTest {
             listBookings.add(responseBookingDto);
         }
 
-        when(bookingService.findByBooker(1L, State.ALL))
+        when(bookingService.getBookingsByBooker(1L, State.ALL))
                 .thenReturn(listBookings);
 
         mvc.perform(get("/bookings?state=ALL")
@@ -147,7 +147,7 @@ class BookingControllerTest {
             listBookings.add(responseBookingDto);
         }
 
-        when(bookingService.findByOwner(1L, State.ALL))
+        when(bookingService.getBookingsByOwner(1L, State.ALL))
                 .thenReturn(listBookings);
 
         mvc.perform(get("/bookings/owner?state=ALL")

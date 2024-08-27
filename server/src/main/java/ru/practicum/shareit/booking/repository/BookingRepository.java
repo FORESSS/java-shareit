@@ -7,12 +7,11 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-
-    List<Booking> findByBookerId(long bookerId);
+    Collection<Booking> findByBookerId(long bookerId);
 
     @Query("select bk " +
             "from Booking as bk " +
@@ -22,7 +21,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "where b.id = :bookerId and bk.end < :now " +
             "group by bk.start " +
             "order by bk.start desc ")
-    List<Booking> findAllBookingByBookerAndPast(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
+    Collection<Booking> findAllBookingByBookerAndPast(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
 
     @Query("select bk " +
             "from Booking as bk " +
@@ -32,7 +31,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "where b.id = :bookerId and bk.start > :now " +
             "group by bk.start " +
             "order by bk.start desc ")
-    List<Booking> findAllBookingByBookerAndFuture(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
+    Collection<Booking> findAllBookingByBookerAndFuture(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
 
     @Query("select bk " +
             "from Booking as bk " +
@@ -42,9 +41,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "where b.id = :bookerId and bk.start < :now and bk.end > :now " +
             "group by bk.start " +
             "order by bk.start desc ")
-    List<Booking> findAllBookingByBookerAndCurrent(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
+    Collection<Booking> findAllBookingByBookerAndCurrent(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
 
-    List<Booking> findByBooker_idAndStatus(long bookerId, String status);
+    Collection<Booking> findByBooker_idAndStatus(long bookerId, String status);
 
     @Query("select bk " +
             "from Booking as bk " +
@@ -54,7 +53,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "where o.id = :ownerId and bk.end < :now " +
             "group by bk.start " +
             "order by bk.start desc ")
-    List<Booking> findAllBookingByOwnerAndPast(@Param("ownerId")long ownerId, @Param("now") LocalDateTime now);
+    Collection<Booking> findAllBookingByOwnerAndPast(@Param("ownerId") long ownerId, @Param("now") LocalDateTime now);
 
     @Query("select bk " +
             "from Booking as bk " +
@@ -64,7 +63,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "where o.id = :ownerId and bk.start > :now " +
             "group by bk.start " +
             "order by bk.start desc ")
-    List<Booking> findAllBookingByOwnerAndFuture(@Param("ownerId")long ownerId, @Param("now") LocalDateTime now);
+    Collection<Booking> findAllBookingByOwnerAndFuture(@Param("ownerId") long ownerId, @Param("now") LocalDateTime now);
 
     @Query("select bk " +
             "from Booking as bk " +
@@ -74,7 +73,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "where o.id = :ownerId and bk.start < :now and bk.end > :now " +
             "group by bk.start " +
             "order by bk.start desc ")
-    List<Booking> findAllBookingByOwnerAndCurrent(@Param("ownerId")long ownerId, @Param("now") LocalDateTime now);
+    Collection<Booking> findAllBookingByOwnerAndCurrent(@Param("ownerId") long ownerId, @Param("now") LocalDateTime now);
 
     @Query("select bk " +
             "from Booking as bk " +
@@ -84,7 +83,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "where o.id = :ownerId and bk.status = :status " +
             "group by bk.start " +
             "order by bk.start desc ")
-    List<Booking> findAllBookingByOwnerAndStatus(@Param("ownerId")long ownerId, @Param("status") String status);
+    Collection<Booking> findAllBookingByOwnerAndStatus(@Param("ownerId") long ownerId, @Param("status") String status);
 
     @Query("select bk " +
             "from Booking as bk " +
@@ -94,7 +93,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "where o.id = :ownerId " +
             "group by bk.start " +
             "order by bk.start desc ")
-    List<Booking> findAllBookingByOwner(@Param("ownerId") long ownerId);
+    Collection<Booking> findAllBookingByOwner(@Param("ownerId") long ownerId);
 
     @Query("select bk " +
             "from Booking as bk " +

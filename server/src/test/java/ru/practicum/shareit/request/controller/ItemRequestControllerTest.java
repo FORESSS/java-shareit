@@ -48,7 +48,7 @@ class ItemRequestControllerTest {
 
     @Test
     void create() throws Exception {
-        when(itemRequestService.create(any(), anyLong()))
+        when(itemRequestService.createRequest(any(), anyLong()))
                 .thenReturn(itemRequestDto);
 
         mvc.perform(post("/requests")
@@ -64,7 +64,7 @@ class ItemRequestControllerTest {
 
     @Test
     void findByRequestId() throws Exception {
-        when(itemRequestService.findByRequestId(anyLong()))
+        when(itemRequestService.getRequestById(anyLong()))
                 .thenReturn(itemRequestDto);
 
         mvc.perform(get("/requests/1")
@@ -90,7 +90,7 @@ class ItemRequestControllerTest {
             requests.add(itemRequestDto);
         }
 
-        when(itemRequestService.findByUserId(anyLong()))
+        when(itemRequestService.getRequestsByUserId(anyLong()))
                 .thenReturn(requests);
 
         mvc.perform(get("/requests")
@@ -115,7 +115,7 @@ class ItemRequestControllerTest {
             requests.add(itemRequestDto);
         }
 
-        when(itemRequestService.findAll(anyLong()))
+        when(itemRequestService.getAllRequests(anyLong()))
                 .thenReturn(requests);
 
         mvc.perform(get("/requests/all")

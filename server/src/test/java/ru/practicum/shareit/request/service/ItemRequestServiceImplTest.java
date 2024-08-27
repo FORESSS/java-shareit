@@ -68,7 +68,7 @@ class ItemRequestServiceImplTest {
     void create() {
         saveEntity();
 
-        ItemRequestDto itemRequestDto = itemRequestService.create(itemRequest, user.getId());
+        ItemRequestDto itemRequestDto = itemRequestService.createRequest(itemRequest, user.getId());
         assertThat(itemRequestDto.getId(), notNullValue());
         assertThat(itemRequestDto.getDescription(), equalTo(itemRequest.getDescription()));
     }
@@ -77,7 +77,7 @@ class ItemRequestServiceImplTest {
     void createFailUser() {
         saveEntity();
 
-        assertThatThrownBy(() -> itemRequestService.create(itemRequest, 3L));
+        assertThatThrownBy(() -> itemRequestService.createRequest(itemRequest, 3L));
     }
 
     @Test
@@ -85,10 +85,10 @@ class ItemRequestServiceImplTest {
         saveEntity();
 
         for (int i = 0; i < 5; i++) {
-            itemRequestService.create(itemRequest, user.getId());
+            itemRequestService.createRequest(itemRequest, user.getId());
         }
 
-        List<ItemRequestDto> itemRequests = itemRequestService.findByUserId(user.getId());
+        List<ItemRequestDto> itemRequests = itemRequestService.getRequestsByUserId(user.getId());
         assertThat(itemRequests.size(), equalTo(5));
     }
 
@@ -97,19 +97,19 @@ class ItemRequestServiceImplTest {
         saveEntity();
 
         for (int i = 0; i < 5; i++) {
-            itemRequestService.create(itemRequest, user2.getId());
+            itemRequestService.createRequest(itemRequest, user2.getId());
         }
 
-        List<ItemRequestDto> itemRequests = itemRequestService.findAll(user.getId());
+        List<ItemRequestDto> itemRequests = itemRequestService.getAllRequests(user.getId());
         assertThat(itemRequests.size(), equalTo(5));
     }
 
     @Test
     void findByRequestId() {
         saveEntity();
-        ItemRequestDto itemRequestDto = itemRequestService.create(itemRequest, user.getId());
+        ItemRequestDto itemRequestDto = itemRequestService.createRequest(itemRequest, user.getId());
 
-        itemRequestDto = itemRequestService.findByRequestId(itemRequestDto.getId());
+        itemRequestDto = itemRequestService.getRequestById(itemRequestDto.getId());
         assertThat(itemRequestDto.getId(), notNullValue());
         assertThat(itemRequestDto.getDescription(), equalTo(itemRequest.getDescription()));
     }

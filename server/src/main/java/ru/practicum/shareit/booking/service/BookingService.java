@@ -4,16 +4,16 @@ import ru.practicum.shareit.booking.dto.RequestBookingDto;
 import ru.practicum.shareit.booking.dto.ResponseBookingDto;
 import ru.practicum.shareit.booking.model.State;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface BookingService {
-    ResponseBookingDto create(RequestBookingDto booking, long id);
+    ResponseBookingDto getBookingById(long userId, long bookingId);
 
-    ResponseBookingDto update(long bookingId, long ownerId, boolean approved);
+    Collection<ResponseBookingDto> getBookingsByBooker(long bookerId, State state);
 
-    ResponseBookingDto findById(long bookingId, long userId);
+    Collection<ResponseBookingDto> getBookingsByOwner(long ownerId, State state);
 
-    List<ResponseBookingDto> findByBooker(long bookerId, State state);
+    ResponseBookingDto createBooking(long id, RequestBookingDto booking);
 
-    List<ResponseBookingDto> findByOwner(long ownerId, State state);
+    ResponseBookingDto updateBooking(long ownerId, long bookingId, boolean approved);
 }

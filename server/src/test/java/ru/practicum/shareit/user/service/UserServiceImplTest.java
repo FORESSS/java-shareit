@@ -37,7 +37,7 @@ class UserServiceImplTest {
 
     @Test
     void create() {
-        UserDto userDto = userService.create(user);
+        UserDto userDto = userService.createUser(user);
         assertThat(userDto.getId(), notNullValue());
         assertThat(userDto.getName(), equalTo(user.getName()));
         assertThat(userDto.getEmail(), equalTo(user.getEmail()));
@@ -45,10 +45,10 @@ class UserServiceImplTest {
 
     @Test
     void update() {
-        UserDto userDto = userService.create(user);
+        UserDto userDto = userService.createUser(user);
         user.setEmail("greg@ya.ru");
 
-        userDto = userService.update(user, userDto.getId());
+        userDto = userService.updateUser(user, userDto.getId());
         assertThat(userDto.getId(), notNullValue());
         assertThat(userDto.getName(), equalTo(user.getName()));
         assertThat(userDto.getEmail(), equalTo(user.getEmail()));
@@ -56,17 +56,17 @@ class UserServiceImplTest {
 
     @Test
     void updateFailUser() {
-        UserDto userDto = userService.create(user);
+        UserDto userDto = userService.createUser(user);
         user.setEmail("greg@ya.ru");
 
-        assertThatThrownBy(() -> userService.update(user, 3L));
+        assertThatThrownBy(() -> userService.updateUser(user, 3L));
     }
 
     @Test
     void findById() {
-        UserDto userDto = userService.create(user);
+        UserDto userDto = userService.createUser(user);
 
-        userDto = userService.findById(userDto.getId());
+        userDto = userService.getUserById(userDto.getId());
         assertThat(userDto.getId(), notNullValue());
         assertThat(userDto.getName(), equalTo(user.getName()));
         assertThat(userDto.getEmail(), equalTo(user.getEmail()));
@@ -75,11 +75,11 @@ class UserServiceImplTest {
     @Test
     void findAll() {
         for (int i = 0; i < 6; i++) {
-            userService.create(user);
+            userService.createUser(user);
             user.setEmail(i + "max@ya.ru");
         }
 
-        List<UserDto> users = userService.findAll();
+        List<UserDto> users = userService.getAllUsers();
         assertThat(users.size(), equalTo(6));
     }
 
@@ -87,13 +87,13 @@ class UserServiceImplTest {
     void delete() {
         long id = 0;
         for (int i = 0; i < 6; i++) {
-            UserDto us = userService.create(user);
+            UserDto us = userService.createUser(user);
             user.setEmail(i + "max@ya.ru");
             id = us.getId();
         }
 
-        userService.delete(id);
-        List<UserDto> users = userService.findAll();
+        userService.deleteUser(id);
+        List<UserDto> users = userService.getAllUsers();
         assertThat(users.size(), equalTo(5));
     }
 }

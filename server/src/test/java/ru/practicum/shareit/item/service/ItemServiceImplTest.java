@@ -111,7 +111,7 @@ class ItemServiceImplTest {
                 .end(LocalDateTime.now().minusHours(2))
                 .itemId(itemDto.getId())
                 .build();
-        bookingService.create(booking, user.getId());
+        bookingService.createBooking(booking, user.getId());
 
         CommentDto comment = CommentDto.builder()
                 .text("vgregerger")
@@ -131,7 +131,7 @@ class ItemServiceImplTest {
         ItemDto itemDto = itemService.createItem(item, user.getId());
         item.setName("Газонокосилка");
 
-        ItemDto updateItemDto = itemService.update(item, itemDto.getId(), user.getId());
+        ItemDto updateItemDto = itemService.updateItem(item, itemDto.getId(), user.getId());
         assertThat(updateItemDto.getId(), notNullValue());
         assertThat(updateItemDto.getName(), equalTo(item.getName()));
         assertThat(updateItemDto.getDescription(), equalTo(item.getDescription()));
@@ -146,7 +146,7 @@ class ItemServiceImplTest {
         itemService.createItem(item, user.getId());
         item.setName("Газонокосилка");
 
-        assertThatThrownBy(() -> itemService.update(item, user.getId(), ownerItemRequest.getId()));
+        assertThatThrownBy(() -> itemService.updateItem(item, user.getId(), ownerItemRequest.getId()));
     }
 
     @Test
@@ -155,7 +155,7 @@ class ItemServiceImplTest {
         item.setRequestId(itemRequest.getId());
         ItemDto itemDto = itemService.createItem(item, user.getId());
 
-        itemDto = itemService.findById(itemDto.getId());
+        itemDto = itemService.getItemById(itemDto.getId());
         assertThat(itemDto.getId(), notNullValue());
         assertThat(itemDto.getName(), equalTo(item.getName()));
         assertThat(itemDto.getDescription(), equalTo(item.getDescription()));
@@ -169,7 +169,7 @@ class ItemServiceImplTest {
         item.setRequestId(itemRequest.getId());
         itemService.createItem(item, user.getId());
 
-        assertThatThrownBy(() -> itemService.findById(5L));
+        assertThatThrownBy(() -> itemService.getItemById(5L));
     }
 
     @Test
@@ -181,7 +181,7 @@ class ItemServiceImplTest {
             itemService.createItem(item, user.getId());
         }
 
-        List<ItemWithDateDto> items = itemService.findByOwnerId(user.getId());
+        List<ItemWithDateDto> items = itemService.getItemsByOwnerId(user.getId());
         assertThat(items.size(), equalTo(5));
     }
 

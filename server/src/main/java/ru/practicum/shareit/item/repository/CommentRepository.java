@@ -8,7 +8,6 @@ import ru.practicum.shareit.item.model.Comment;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-
     @Query("select c " +
             "from Comment as c " +
             "join c.item as i " +

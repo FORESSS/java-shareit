@@ -60,7 +60,7 @@ class UserControllerTest {
             users.add(userDto);
         }
 
-        when(userService.findAll())
+        when(userService.getAllUsers())
                 .thenReturn(users);
 
         mvc.perform(get("/users")
@@ -74,7 +74,7 @@ class UserControllerTest {
 
     @Test
     void create() throws Exception {
-        when(userService.create(any()))
+        when(userService.createUser(any()))
                 .thenReturn(userDto);
 
         mvc.perform(post("/users")
@@ -91,7 +91,7 @@ class UserControllerTest {
 
     @Test
     void update() throws Exception {
-        when(userService.update(any(), anyLong()))
+        when(userService.updateUser(any(), anyLong()))
                 .thenReturn(userDto);
 
         mvc.perform(patch("/users/1")
@@ -118,7 +118,7 @@ class UserControllerTest {
 
     @Test
     void findById() throws Exception {
-        when(userService.findById(anyLong()))
+        when(userService.getUserById(anyLong()))
                 .thenReturn(userDto);
 
         mvc.perform(get("/users/1")

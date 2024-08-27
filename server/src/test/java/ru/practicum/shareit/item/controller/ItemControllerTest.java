@@ -95,7 +95,7 @@ class ItemControllerTest {
 
     @Test
     void update() throws Exception {
-        when(itemService.update(any(), anyLong(), anyLong()))
+        when(itemService.updateItem(any(), anyLong(), anyLong()))
                 .thenReturn(itemDto);
 
         mvc.perform(patch("/items/1")
@@ -115,7 +115,7 @@ class ItemControllerTest {
 
     @Test
     void findById() throws Exception {
-        when(itemService.findById(anyLong()))
+        when(itemService.getItemById(anyLong()))
                 .thenReturn(itemDto);
 
         mvc.perform(get("/items/1")
@@ -148,7 +148,7 @@ class ItemControllerTest {
             items.add(item);
         }
 
-        when(itemService.findByOwnerId(anyLong()))
+        when(itemService.getItemsByOwnerId(anyLong()))
                 .thenReturn(items);
 
         mvc.perform(get("/items")

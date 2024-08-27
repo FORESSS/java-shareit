@@ -75,7 +75,7 @@ class BookingServiceImplTest {
         saveEntity();
         requestBookingDto.setItemId(item.getId());
 
-        ResponseBookingDto responseBookingDto = bookingService.create(requestBookingDto, user.getId());
+        ResponseBookingDto responseBookingDto = bookingService.createBooking(requestBookingDto, user.getId());
         assertThat(responseBookingDto.getId(), notNullValue());
         assertThat(responseBookingDto.getItem().getName(), equalTo(item.getName()));
         assertThat(responseBookingDto.getBooker().getName(), equalTo(user.getName()));
@@ -86,7 +86,7 @@ class BookingServiceImplTest {
     void createFailUser() {
         saveEntity();
 
-        assertThatThrownBy(() -> bookingService.create(requestBookingDto, 3L));
+        assertThatThrownBy(() -> bookingService.createBooking(requestBookingDto, 3L));
     }
 
     @Test
@@ -94,7 +94,7 @@ class BookingServiceImplTest {
         saveEntity();
 
         requestBookingDto.setItemId(5L);
-        assertThatThrownBy(() -> bookingService.create(requestBookingDto, 1L));
+        assertThatThrownBy(() -> bookingService.createBooking(requestBookingDto, 1L));
     }
 
     @Test
@@ -102,9 +102,9 @@ class BookingServiceImplTest {
         saveEntity();
         requestBookingDto.setItemId(item.getId());
 
-        ResponseBookingDto responseBookingDto = bookingService.create(requestBookingDto, user.getId());
+        ResponseBookingDto responseBookingDto = bookingService.createBooking(requestBookingDto, user.getId());
 
-        responseBookingDto = bookingService.update(responseBookingDto.getId(), ownerUser.getId(), true);
+        responseBookingDto = bookingService.updateBooking(responseBookingDto.getId(), ownerUser.getId(), true);
         assertThat(responseBookingDto.getId(), notNullValue());
         assertThat(responseBookingDto.getItem().getName(), equalTo(item.getName()));
         assertThat(responseBookingDto.getBooker().getName(), equalTo(user.getName()));
@@ -115,18 +115,18 @@ class BookingServiceImplTest {
     void updateFailBooking() {
         saveEntity();
         requestBookingDto.setItemId(item.getId());
-        bookingService.create(requestBookingDto, user.getId());
+        bookingService.createBooking(requestBookingDto, user.getId());
 
-        assertThatThrownBy(() -> bookingService.update(5L, ownerUser.getId(), true));
+        assertThatThrownBy(() -> bookingService.updateBooking(5L, ownerUser.getId(), true));
     }
 
     @Test
     void updateFailAccess() {
         saveEntity();
         requestBookingDto.setItemId(item.getId());
-        ResponseBookingDto responseBookingDto = bookingService.create(requestBookingDto, user.getId());
+        ResponseBookingDto responseBookingDto = bookingService.createBooking(requestBookingDto, user.getId());
 
-        assertThatThrownBy(() -> bookingService.update(responseBookingDto.getId(), 1L, true));
+        assertThatThrownBy(() -> bookingService.updateBooking(responseBookingDto.getId(), 1L, true));
     }
 
     @Test
@@ -134,9 +134,9 @@ class BookingServiceImplTest {
         saveEntity();
         requestBookingDto.setItemId(item.getId());
 
-        ResponseBookingDto responseBookingDto = bookingService.create(requestBookingDto, user.getId());
+        ResponseBookingDto responseBookingDto = bookingService.createBooking(requestBookingDto, user.getId());
 
-        responseBookingDto = bookingService.findById(responseBookingDto.getId(), user.getId());
+        responseBookingDto = bookingService.getBookingById(responseBookingDto.getId(), user.getId());
         assertThat(responseBookingDto.getId(), notNullValue());
         assertThat(responseBookingDto.getItem().getName(), equalTo(item.getName()));
         assertThat(responseBookingDto.getBooker().getName(), equalTo(user.getName()));
@@ -149,10 +149,10 @@ class BookingServiceImplTest {
         requestBookingDto.setItemId(item.getId());
 
         for (int i = 0; i < 5; i++) {
-           bookingService.create(requestBookingDto, user.getId());
+           bookingService.createBooking(requestBookingDto, user.getId());
         }
 
-        List<ResponseBookingDto> bookings = bookingService.findByBooker(user.getId(), State.ALL);
+        List<ResponseBookingDto> bookings = bookingService.getBookingsByBooker(user.getId(), State.ALL);
         assertThat(bookings.size(), equalTo(5));
     }
 
@@ -162,10 +162,10 @@ class BookingServiceImplTest {
         requestBookingDto.setItemId(item.getId());
 
         for (int i = 0; i < 5; i++) {
-            bookingService.create(requestBookingDto, user.getId());
+            bookingService.createBooking(requestBookingDto, user.getId());
         }
 
-        List<ResponseBookingDto> bookings = bookingService.findByBooker(user.getId(), State.ALL);
+        List<ResponseBookingDto> bookings = bookingService.getBookingsByBooker(user.getId(), State.ALL);
         assertThat(bookings.size(), equalTo(5));
     }
 

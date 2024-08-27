@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.request.model.ItemRequest;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> {
 
@@ -15,7 +15,7 @@ public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> 
             "where o.id = :ownerId " +
             "group by ir.id " +
             "order by ir.created desc ")
-    List<ItemRequest> findByOwnerId(@Param("ownerId") long ownerId);
+    Collection<ItemRequest> findByOwnerId(@Param("ownerId") long ownerId);
 
     @Query("select ir " +
             "from ItemRequest as ir " +
@@ -23,5 +23,5 @@ public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> 
             "where o.id != :ownerId " +
             "group by ir.id " +
             "order by ir.created desc ")
-    List<ItemRequest> findByOwnerIdNotEquals(@Param("ownerId") long ownerId);
+    Collection<ItemRequest> findByOwnerIdNotEquals(@Param("ownerId") long ownerId);
 }
