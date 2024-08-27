@@ -1,4 +1,4 @@
-package ru.practicum.shareit.constants;
+package ru.practicum.shareit.util;
 
 import java.time.LocalDateTime;
 

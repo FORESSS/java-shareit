@@ -7,7 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-import static ru.practicum.shareit.constants.Constants.PATTERN;
+import static ru.practicum.shareit.util.Constants.PATTERN;
 
 @Data
 @Builder
