@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.State;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.exception.InvalidCommentException;
 import ru.practicum.shareit.exception.PermissionDeniedException;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.item.model.Item;
@@ -38,7 +39,7 @@ public class BookingServiceImpl implements BookingService {
         log.info("Начало процесса создания бронирования с userId = {}", userId);
 
         if (creatingBooking.getStart().isAfter(creatingBooking.getEnd())) {
-            throw new ValidationException("Время старта бронирование должно быть до времени конца бронирования");
+            throw new InvalidCommentException("Время старта бронирование должно быть до времени конца бронирования");
         }
 
         User user = validator.validateAndGetUser(userId);
