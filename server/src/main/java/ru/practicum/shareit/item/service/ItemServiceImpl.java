@@ -134,7 +134,7 @@ public class ItemServiceImpl implements ItemService {
     public ItemDto updateItem(long ownerId, long itemId, ItemDto newItem) {
         validator.checkUserId(ownerId);
         Item item = validator.validateAndGetItem(itemId);
-        validator.checkItemOwner(ownerId, item);
+       // validator.checkItemOwner(ownerId, item);
         if (newItem.getName() != null && !newItem.getName().isBlank()) {
             item.setName(newItem.getName());
         }
