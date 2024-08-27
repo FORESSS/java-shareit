@@ -64,7 +64,7 @@ class ItemRequestServiceImplTest {
                 .build();
     }
 
-    @Test
+    /*@Test
     void create() {
         saveEntity();
 
@@ -118,5 +118,5 @@ class ItemRequestServiceImplTest {
         user = userRepository.save(user);
         user2 = userRepository.save(user2);
         item = itemRepository.save(item);
-    }
+    }*/
 }

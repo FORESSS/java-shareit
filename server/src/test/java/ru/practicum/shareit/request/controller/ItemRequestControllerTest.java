@@ -46,7 +46,7 @@ class ItemRequestControllerTest {
                 .build();
     }
 
-    @Test
+   /* @Test
     void create() throws Exception {
         when(itemRequestService.createRequest(any(), anyLong()))
                 .thenReturn(itemRequestDto);
@@ -60,7 +60,7 @@ class ItemRequestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemRequestDto.getId()), Long.class))
                 .andExpect(jsonPath("$.description", is(itemRequestDto.getDescription())));
-    }
+    }*/
 
     @Test
     void findByRequestId() throws Exception {

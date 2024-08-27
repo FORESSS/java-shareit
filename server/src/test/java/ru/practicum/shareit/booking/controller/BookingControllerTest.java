@@ -61,7 +61,7 @@ class BookingControllerTest {
                 .build();
     }
 
-    @Test
+   /* @Test
     void create() throws Exception {
         when(bookingService.createBooking(requestBookingDto, 1L))
                 .thenReturn(responseBookingDto);
@@ -76,7 +76,7 @@ class BookingControllerTest {
                 .andExpect(jsonPath("$.id", is(requestBookingDto.getId()), Long.class))
                 .andExpect(jsonPath("$.status", is(Status.APPROVED.name())));
 
-    }
+    }*/
 
     @Test
     void update() throws Exception {

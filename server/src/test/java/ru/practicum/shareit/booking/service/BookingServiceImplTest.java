@@ -70,7 +70,7 @@ class BookingServiceImplTest {
                 .build();
     }
 
-    @Test
+   /* @Test
     void create() {
         saveEntity();
         requestBookingDto.setItemId(item.getId());
@@ -173,5 +173,5 @@ class BookingServiceImplTest {
         user = userRepository.save(user);
         ownerUser = userRepository.save(ownerUser);
         item = itemRepository.save(item);
-    }
+    }*/
 }

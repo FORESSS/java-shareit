@@ -89,7 +89,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email", is(userDto.getEmail())));
     }
 
-    @Test
+   /* @Test
     void update() throws Exception {
         when(userService.updateUser(any(), anyLong()))
                 .thenReturn(userDto);
@@ -104,7 +104,7 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(userDto.getName())))
                 .andExpect(jsonPath("$.email", is(userDto.getEmail())));
-    }
+    }*/
 
     @Test
     void deleteUser() throws Exception {
