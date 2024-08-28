@@ -43,8 +43,8 @@ public class BookingServiceImpl implements BookingService {
             case PAST -> bookingRepository.findAllBookingByBookerAndPast(bookerId, LocalDateTime.now());
             case CURRENT -> bookingRepository.findAllBookingByBookerAndCurrent(bookerId, LocalDateTime.now());
             case FUTURE -> bookingRepository.findAllBookingByBookerAndFuture(bookerId, LocalDateTime.now());
-            case WAITING -> bookingRepository.findByBookerIdAndStatus(bookerId, Status.WAITING.name());
-            case REJECTED -> bookingRepository.findByBookerIdAndStatus(bookerId, Status.REJECTED.name());
+            case WAITING -> bookingRepository.findByBooker_idAndStatus(bookerId, Status.WAITING.name());
+            case REJECTED -> bookingRepository.findByBooker_idAndStatus(bookerId, Status.REJECTED.name());
             default -> bookingRepository.findByBookerId(bookerId);
         };
         log.info("Пользователь с id: {} запросил список своих бронирований в состоянии: {}", bookerId, state);
@@ -62,7 +62,7 @@ public class BookingServiceImpl implements BookingService {
             case FUTURE -> bookingRepository.findAllBookingByOwnerAndFuture(ownerId, LocalDateTime.now());
             case WAITING -> bookingRepository.findAllBookingByOwnerAndStatus(ownerId, Status.WAITING.name());
             case REJECTED -> bookingRepository.findAllBookingByOwnerAndStatus(ownerId, Status.REJECTED.name());
-            default -> bookingRepository.findByBookerId(ownerId);
+            default -> bookingRepository.findAllBookingByOwner(ownerId);
         };
         log.info("Владелец с id: {} запросил список бронирований для своих вещей в состоянии: {}", ownerId, state);
         return bookings.stream()
