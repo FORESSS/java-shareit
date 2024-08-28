@@ -62,7 +62,7 @@ public class BookingServiceImpl implements BookingService {
             case FUTURE -> bookingRepository.findAllBookingByOwnerAndFuture(ownerId, LocalDateTime.now());
             case WAITING -> bookingRepository.findAllBookingByOwnerAndStatus(ownerId, Status.WAITING.name());
             case REJECTED -> bookingRepository.findAllBookingByOwnerAndStatus(ownerId, Status.REJECTED.name());
-            default -> bookingRepository.findByBookerId(ownerId);
+            default -> bookingRepository.findAllBookingByOwner(ownerId);
         };
         log.info("Владелец с id: {} запросил список бронирований для своих вещей в состоянии: {}", ownerId, state);
         return bookings.stream()
