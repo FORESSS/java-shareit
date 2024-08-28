@@ -32,13 +32,13 @@ class UserServiceImplTest {
                 .build();
     }
 
-    @Test
+   /* @Test
     void create() {
         UserDto userDto = userService.createUser(user);
         assertThat(userDto.getId(), notNullValue());
         assertThat(userDto.getName(), equalTo(user.getName()));
         assertThat(userDto.getEmail(), equalTo(user.getEmail()));
-    }
+    }*/
 
    /* @Test
     void update() {

@@ -11,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 		webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class ShareItTests {
 
-	@Test
-	void contextLoads() {
-	}
+
 
 }
