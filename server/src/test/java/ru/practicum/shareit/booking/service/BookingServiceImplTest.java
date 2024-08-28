@@ -57,7 +57,7 @@ class BookingServiceImplTest {
         item.setDescription("Description");
 
         requestBookingDto = RequestBookingDto.builder()
-                .start( LocalDateTime.now().plusMinutes(1))
+                .start(LocalDateTime.now().plusMinutes(1))
                 .end(LocalDateTime.now().plusHours(1))
                 .itemId(item.getId())
                 .build();
@@ -82,19 +82,19 @@ class BookingServiceImplTest {
         for (int i = 0; i < 5; i++) {
             bookingService.createBooking(user.getId(), requestBookingDto);
         }
-                Collection<ResponseBookingDto> bookings = bookingService.getBookingsByBooker(user.getId(), State.ALL);
-              assertThat(bookings.size(), equalTo(5));
+        Collection<ResponseBookingDto> bookings = bookingService.getBookingsByBooker(user.getId(), State.ALL);
+        assertThat(bookings.size(), equalTo(5));
     }
 
     @Test
     void testGetBookingsByOwner() {
         saveEntity();
-              requestBookingDto.setItemId(item.getId());
+        requestBookingDto.setItemId(item.getId());
         for (int i = 0; i < 5; i++) {
             bookingService.createBooking(user.getId(), requestBookingDto);
         }
-               Collection<ResponseBookingDto> bookings = bookingService.getBookingsByOwner(user.getId(), State.ALL);
-               assertThat(bookings.size(), equalTo(5));
+        Collection<ResponseBookingDto> bookings = bookingService.getBookingsByOwner(user.getId(), State.ALL);
+        assertThat(bookings.size(), equalTo(5));
     }
 
     @Test
@@ -113,7 +113,7 @@ class BookingServiceImplTest {
         saveEntity();
         requestBookingDto.setItemId(item.getId());
         ResponseBookingDto responseBookingDto = bookingService.createBooking(user.getId(), requestBookingDto);
-        responseBookingDto = bookingService.updateBooking( ownerUser.getId(), responseBookingDto.getId(),  true);
+        responseBookingDto = bookingService.updateBooking(ownerUser.getId(), responseBookingDto.getId(), true);
         assertThat(responseBookingDto.getId(), notNullValue());
         assertThat(responseBookingDto.getItem().getName(), equalTo(item.getName()));
         assertThat(responseBookingDto.getBooker().getName(), equalTo(user.getName()));

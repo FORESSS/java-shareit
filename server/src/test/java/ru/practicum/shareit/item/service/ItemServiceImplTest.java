@@ -95,7 +95,7 @@ class ItemServiceImplTest {
         item.setRequestId(itemRequest.getId());
         itemService.createItem(user.getId(), item);
         Collection<ItemDto> items = itemService.searchByText("Item");
-       assertThat(items.size(), equalTo(1));
+        assertThat(items.size(), equalTo(1));
         assertThat(items.stream().toList().get(0).getName(), equalTo("Item"));
     }
 

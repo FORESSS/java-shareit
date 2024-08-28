@@ -52,8 +52,8 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void findRequestById() throws Exception {
-        when(requestClient.findRequestById(1L))
+    void testGetRequestById() throws Exception {
+        when(requestClient.getRequestById(1L))
                 .thenReturn(ResponseEntity.ok(itemRequestDto));
 
         mvc.perform(get("/requests/{requestId}", 1L)
@@ -62,9 +62,9 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void findRequestsByUserId() throws Exception {
+    void testGetRequestsByUserId() throws Exception {
         List<ItemRequestDto> requests = Collections.singletonList(itemRequestDto);
-        when(requestClient.findRequestsByUserId(1L))
+        when(requestClient.getRequestsByUserId(1L))
                 .thenReturn(ResponseEntity.ok(requests));
 
         mvc.perform(get("/requests")
@@ -73,9 +73,9 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void findAllRequests() throws Exception {
+    void testGetAllRequests() throws Exception {
         List<ItemRequestDto> requests = Collections.singletonList(itemRequestDto);
-        when(requestClient.findAllRequests(1L))
+        when(requestClient.getAllRequests(1L))
                 .thenReturn(ResponseEntity.ok(requests));
 
         mvc.perform(get("/requests/all")
@@ -84,7 +84,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void testCreateRequest() throws Exception {
         mvc.perform(post("/requests")
                         .content(mapper.writeValueAsString(itemRequestDto))
                         .characterEncoding(StandardCharsets.UTF_8)

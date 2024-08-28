@@ -51,8 +51,8 @@ class UserControllerTest {
     }
 
     @Test
-    void findAllUsers() throws Exception {
-        when(userClient.findAllUsers())
+    void testGetAllUsers() throws Exception {
+        when(userClient.getAllUsers())
                 .thenReturn(ResponseEntity.ok().body(Collections.singletonList(userDto)));
 
         mvc.perform(get("/users")
@@ -62,8 +62,8 @@ class UserControllerTest {
     }
 
     @Test
-    void findUserById() throws Exception {
-        when(userClient.findUserById(anyLong()))
+    void testGetUserById() throws Exception {
+        when(userClient.getUserById(anyLong()))
                 .thenReturn(ResponseEntity.ok().body(userDto));
 
         mvc.perform(get("/users/{userId}", 1L)
@@ -73,7 +73,7 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser() throws Exception {
+    void testCreateUser() throws Exception {
         when(userClient.createUser(any(UserDto.class)))
                 .thenReturn(ResponseEntity.status(201).body(userDto));
 
@@ -85,7 +85,7 @@ class UserControllerTest {
     }
 
     @Test
-    void updateUser() throws Exception {
+    void testUpdateUser() throws Exception {
         when(userClient.updateUser(anyLong(), any(UserDto.class)))
                 .thenReturn(ResponseEntity.ok().body(userDto));
 
@@ -97,7 +97,7 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUser() throws Exception {
+    void testDeleteUser() throws Exception {
         when(userClient.deleteUser(anyLong()))
                 .thenReturn(ResponseEntity.ok().build());
 

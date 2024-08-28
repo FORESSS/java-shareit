@@ -52,7 +52,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getItemById() throws Exception {
+    void testGetItemById() throws Exception {
         when(itemClient.getItemById(anyLong()))
                 .thenReturn(ResponseEntity.ok().body(itemDto));
 
@@ -63,7 +63,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getItemsByOwnerId() throws Exception {
+    void testGetItemsByOwnerId() throws Exception {
         when(itemClient.getItemsByOwnerId(anyLong()))
                 .thenReturn(ResponseEntity.ok().body(Collections.singletonList(itemDto)));
 
@@ -75,7 +75,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void searchItemByText() throws Exception {
+    void testSearchItemByText() throws Exception {
         when(itemClient.searchItemByText(anyLong(), any(String.class)))
                 .thenReturn(ResponseEntity.ok().body(Collections.singletonList(itemDto)));
 
@@ -88,7 +88,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void createItem() throws Exception {
+    void testCreateItem() throws Exception {
         when(itemClient.createItem(anyLong(), any(ItemDto.class)))
                 .thenReturn(ResponseEntity.status(201).body(itemDto));
 
@@ -101,7 +101,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void updateItem() throws Exception {
+    void testUpdateItem() throws Exception {
         when(itemClient.updateItem(anyLong(), anyLong(), any(ItemDto.class)))
                 .thenReturn(ResponseEntity.ok().body(itemDto));
 

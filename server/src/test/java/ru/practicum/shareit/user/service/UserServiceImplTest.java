@@ -72,7 +72,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void deleteUser() {
+    void testDeleteUser() {
         long id = 0;
         for (int i = 0; i < 6; i++) {
             UserDto us = userService.createUser(user);
