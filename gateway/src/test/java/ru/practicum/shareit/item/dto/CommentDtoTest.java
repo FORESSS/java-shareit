@@ -22,9 +22,9 @@ class CommentDtoTest {
     void setUp() {
         comment = CommentDto.builder()
                 .id(1L)
-                .text("qwer")
+                .text("Item")
                 .itemId(1L)
-                .authorName("Max")
+                .authorName("Author")
                 .created(LOCAL_DATE_TIME)
                 .build();
     }
@@ -33,10 +33,10 @@ class CommentDtoTest {
     void testResponseBookingDto() throws Exception {
         JsonContent<CommentDto> result = json.write(comment);
         assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(1);
-        assertThat(result).extractingJsonPathStringValue("$.text").isEqualTo("qwer");
+        assertThat(result).extractingJsonPathStringValue("$.text").isEqualTo("Item");
         assertThat(result).extractingJsonPathStringValue("$.created")
                 .isEqualTo("2000-10-20, 10:20:10");
         assertThat(result).extractingJsonPathNumberValue("$.itemId").isEqualTo(1);
-        assertThat(result).extractingJsonPathStringValue("$.authorName").isEqualTo("Max");
+        assertThat(result).extractingJsonPathStringValue("$.authorName").isEqualTo("Author");
     }
 }
