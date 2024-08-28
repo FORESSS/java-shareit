@@ -43,7 +43,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "order by bk.start desc ")
     Collection<Booking> findAllBookingByBookerAndCurrent(@Param("bookerId") long bookerId, @Param("now") LocalDateTime now);
 
-    Collection<Booking> findByBooker_idAndStatus(long bookerId, String status);
+    Collection<Booking> findByBookerIdAndStatus(long bookerId, String status);
 
     @Query("select bk " +
             "from Booking as bk " +

@@ -24,15 +24,15 @@ public class RequestClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> findRequestById(long requestId) {
+    public ResponseEntity<Object> getRequestById(long requestId) {
         return get("/" + requestId);
     }
 
-    public ResponseEntity<Object> findRequestsByUserId(long userId) {
+    public ResponseEntity<Object> getRequestsByUserId(long userId) {
         return get("", userId);
     }
 
-    public ResponseEntity<Object> findAllRequests(long userId) {
+    public ResponseEntity<Object> getAllRequests(long userId) {
         return post("/all", userId);
     }
 

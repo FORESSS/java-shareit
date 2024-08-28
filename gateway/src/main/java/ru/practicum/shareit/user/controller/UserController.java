@@ -17,14 +17,14 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> findAllUsers() {
-        return userClient.findAllUsers();
+    public ResponseEntity<Object> getAllUsers() {
+        return userClient.getAllUsers();
     }
 
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> findUserById(@PathVariable @Positive long userId) {
-        return userClient.findUserById(userId);
+    public ResponseEntity<Object> getUserById(@PathVariable @Positive long userId) {
+        return userClient.getUserById(userId);
     }
 
     @PostMapping

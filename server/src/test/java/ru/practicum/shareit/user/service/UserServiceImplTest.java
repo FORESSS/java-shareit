@@ -7,6 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.user.dto.UserDto;
 
+import java.util.Collection;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
@@ -15,7 +17,7 @@ import static org.hamcrest.Matchers.notNullValue;
 @SpringBootTest(
         properties = {"spring.datasource.driver-class-name=org.h2.Driver",
                 "spring.datasource.url=jdbc:h2:mem:shareit",
-                "spring.datasource.username=dbuser",
+                "spring.datasource.username=fores",
                 "spring.datasource.password=12345"},
         webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class UserServiceImplTest {
@@ -27,42 +29,24 @@ class UserServiceImplTest {
     @BeforeEach
     void beforeEach() {
         user = UserDto.builder()
-                .name("Max")
-                .email("max@ya.ru")
+                .name("User")
+                .email("test@test.com")
                 .build();
     }
 
     @Test
-    void create() {
-        UserDto userDto = userService.createUser(user);
-        assertThat(userDto.getId(), notNullValue());
-        assertThat(userDto.getName(), equalTo(user.getName()));
-        assertThat(userDto.getEmail(), equalTo(user.getEmail()));
-    }
-
-   /* @Test
-    void update() {
-        UserDto userDto = userService.createUser(user);
-        user.setEmail("greg@ya.ru");
-
-        userDto = userService.updateUser(user, userDto.getId());
-        assertThat(userDto.getId(), notNullValue());
-        assertThat(userDto.getName(), equalTo(user.getName()));
-        assertThat(userDto.getEmail(), equalTo(user.getEmail()));
+    void testGetAllUsers() {
+        for (int i = 0; i < 6; i++) {
+            userService.createUser(user);
+            user.setEmail(i + "test@test.com");
+        }
+        Collection<UserDto> users = userService.getAllUsers();
+        assertThat(users.size(), equalTo(6));
     }
 
     @Test
-    void updateFailUser() {
+    void testGetUserById() {
         UserDto userDto = userService.createUser(user);
-        user.setEmail("greg@ya.ru");
-
-        assertThatThrownBy(() -> userService.updateUser(user, 3L));
-    }
-
-    @Test
-    void findById() {
-        UserDto userDto = userService.createUser(user);
-
         userDto = userService.getUserById(userDto.getId());
         assertThat(userDto.getId(), notNullValue());
         assertThat(userDto.getName(), equalTo(user.getName()));
@@ -70,27 +54,33 @@ class UserServiceImplTest {
     }
 
     @Test
-    void findAll() {
-        for (int i = 0; i < 6; i++) {
-            userService.createUser(user);
-            user.setEmail(i + "max@ya.ru");
-        }
-
-        List<UserDto> users = userService.getAllUsers();
-        assertThat(users.size(), equalTo(6));
+    void testCreateUser() {
+        UserDto userDto = userService.createUser(user);
+        assertThat(userDto.getId(), notNullValue());
+        assertThat(userDto.getName(), equalTo(user.getName()));
+        assertThat(userDto.getEmail(), equalTo(user.getEmail()));
     }
 
     @Test
-    void delete() {
+    void testUpdateUser() {
+        UserDto userDto = userService.createUser(user);
+        user.setEmail("xxxxxx@test.ru");
+        userDto = userService.updateUser(userDto.getId(), user);
+        assertThat(userDto.getId(), notNullValue());
+        assertThat(userDto.getName(), equalTo(user.getName()));
+        assertThat(userDto.getEmail(), equalTo(user.getEmail()));
+    }
+
+    @Test
+    void testDeleteUser() {
         long id = 0;
         for (int i = 0; i < 6; i++) {
             UserDto us = userService.createUser(user);
-            user.setEmail(i + "max@ya.ru");
+            user.setEmail(i + "test@test.com");
             id = us.getId();
         }
-
         userService.deleteUser(id);
-        List<UserDto> users = userService.getAllUsers();
+        Collection<UserDto> users = userService.getAllUsers();
         assertThat(users.size(), equalTo(5));
-    }*/
+    }
 }
