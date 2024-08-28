@@ -19,20 +19,20 @@ public class ItemRequestController {
 
     @GetMapping("/{requestId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> getRequestById(@PathVariable @Positive long requestId) {
-        return requestClient.getRequestById(requestId);
+    public ResponseEntity<Object> findRequestById(@PathVariable @Positive long requestId) {
+        return requestClient.findRequestById(requestId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> getRequestsByUserId(@RequestHeader(USER_ID) @Positive long userId) {
-        return requestClient.getRequestsByUserId(userId);
+    public ResponseEntity<Object> findRequestsByUserId(@RequestHeader(USER_ID) @Positive long userId) {
+        return requestClient.findRequestsByUserId(userId);
     }
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> getAllRequests(@RequestHeader(USER_ID) @Positive long userId) {
-        return requestClient.getAllRequests(userId);
+    public ResponseEntity<Object> findAllRequests(@RequestHeader(USER_ID) @Positive long userId) {
+        return requestClient.findAllRequests(userId);
     }
 
     @PostMapping

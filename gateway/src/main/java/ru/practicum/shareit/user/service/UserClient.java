@@ -24,11 +24,11 @@ public class UserClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> getAllUsers() {
+    public ResponseEntity<Object> findAllUsers() {
         return get("");
     }
 
-    public ResponseEntity<Object> getUserById(long userId) {
+    public ResponseEntity<Object> findUserById(long userId) {
         return get("/" + userId);
     }
 
