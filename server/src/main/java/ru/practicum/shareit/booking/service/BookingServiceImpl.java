@@ -43,8 +43,8 @@ public class BookingServiceImpl implements BookingService {
             case PAST -> bookingRepository.findAllBookingByBookerAndPast(bookerId, LocalDateTime.now());
             case CURRENT -> bookingRepository.findAllBookingByBookerAndCurrent(bookerId, LocalDateTime.now());
             case FUTURE -> bookingRepository.findAllBookingByBookerAndFuture(bookerId, LocalDateTime.now());
-            case WAITING -> bookingRepository.findByBookerIdAndStatus(bookerId, Status.WAITING.name());
-            case REJECTED -> bookingRepository.findByBookerIdAndStatus(bookerId, Status.REJECTED.name());
+            case WAITING -> bookingRepository.findByBooker_idAndStatus(bookerId, Status.WAITING.name());
+            case REJECTED -> bookingRepository.findByBooker_idAndStatus(bookerId, Status.REJECTED.name());
             default -> bookingRepository.findByBookerId(bookerId);
         };
         log.info("Пользователь с id: {} запросил список своих бронирований в состоянии: {}", bookerId, state);

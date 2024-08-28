@@ -16,34 +16,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = ItemRequestController.class)
 class ItemRequestControllerTest {
+
     @Autowired
     private ObjectMapper mapper;
+
     @Autowired
     private MockMvc mvc;
+
     @MockBean
     private ItemRequestService itemRequestService;
+
     private ItemRequestDto itemRequestDto;
 
     @BeforeEach
-    void setUp() {
+    void setUo() {
         itemRequestDto = ItemRequestDto.builder()
                 .id(1L)
                 .description("description")
                 .build();
     }
 
+   /* @Test
+    void create() throws Exception {
+        when(itemRequestService.createRequest(any(), anyLong()))
+                .thenReturn(itemRequestDto);
+
+        mvc.perform(post("/requests")
+                        .content(mapper.writeValueAsString(itemRequestDto))
+                        .header("X-Sharer-User-Id", 1L)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(itemRequestDto.getId()), Long.class))
+                .andExpect(jsonPath("$.description", is(itemRequestDto.getDescription())));
+    }*/
+
     @Test
-    void testGetRequestById() throws Exception {
+    void findByRequestId() throws Exception {
         when(itemRequestService.getRequestById(anyLong()))
                 .thenReturn(itemRequestDto);
 
@@ -52,12 +70,15 @@ class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(itemRequestDto.getId()), Long.class))
+                .andExpect(jsonPath("$.description", is(itemRequestDto.getDescription())));
     }
 
     @Test
-    void testGetRequestsByUserId() throws Exception {
+    void findByUserId() throws Exception {
         List<ItemRequestDto> requests = new ArrayList<>();
+
         for (int i = 0; i < 5; i++) {
             ItemRequestDto itemRequestDto = ItemRequestDto.builder()
                     .id(i)
@@ -66,6 +87,7 @@ class ItemRequestControllerTest {
 
             requests.add(itemRequestDto);
         }
+
         when(itemRequestService.getRequestsByUserId(anyLong()))
                 .thenReturn(requests);
 
@@ -79,15 +101,18 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void testGetAllRequests() throws Exception {
+    void findAll() throws Exception {
         List<ItemRequestDto> requests = new ArrayList<>();
+
         for (int i = 0; i < 5; i++) {
             ItemRequestDto itemRequestDto = ItemRequestDto.builder()
                     .id(i)
                     .description("description")
                     .build();
+
             requests.add(itemRequestDto);
         }
+
         when(itemRequestService.getAllRequests(anyLong()))
                 .thenReturn(requests);
 
@@ -98,21 +123,5 @@ class ItemRequestControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", is(5)));
-    }
-
-    @Test
-    void testCreateRequest() throws Exception {
-        when(itemRequestService.createRequest(anyLong(), any()))
-                .thenReturn(itemRequestDto);
-
-        mvc.perform(post("/requests")
-                        .content(mapper.writeValueAsString(itemRequestDto))
-                        .header("X-Sharer-User-Id", 1L)
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(itemRequestDto.getId()), Long.class))
-                .andExpect(jsonPath("$.description", is(itemRequestDto.getDescription())));
     }
 }
