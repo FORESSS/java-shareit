@@ -21,7 +21,7 @@ class ItemRequestDtoTest {
     void setUp() {
         itemRequestDto = ItemRequestDto.builder()
                 .id(1L)
-                .description("qwer")
+                .description("Request")
                 .created(LOCAL_DATE_TIME)
                 .build();
     }
@@ -32,6 +32,6 @@ class ItemRequestDtoTest {
         assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(1);
         assertThat(result).extractingJsonPathStringValue("$.created")
                 .isEqualTo("2000-10-20, 10:20:10");
-        assertThat(result).extractingJsonPathStringValue("$.description").isEqualTo("qwer");
+        assertThat(result).extractingJsonPathStringValue("$.description").isEqualTo("Request");
     }
 }
