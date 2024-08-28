@@ -27,11 +27,11 @@ public class ItemClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> findItemById(long itemId) {
+    public ResponseEntity<Object> getItemById(long itemId) {
         return get("/" + itemId);
     }
 
-    public ResponseEntity<Object> findItemsByOwnerId(long userId) {
+    public ResponseEntity<Object> getItemsByOwnerId(long userId) {
         return get("", userId);
     }
 

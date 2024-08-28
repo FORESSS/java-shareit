@@ -20,14 +20,14 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> findItemById(@PathVariable @Positive long itemId) {
-        return itemClient.findItemById(itemId);
+    public ResponseEntity<Object> getItemById(@PathVariable @Positive long itemId) {
+        return itemClient.getItemById(itemId);
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> findItemsByOwnerId(@RequestHeader(USER_ID) @Positive long ownerId) {
-        return itemClient.findItemsByOwnerId(ownerId);
+    public ResponseEntity<Object> getItemsByOwnerId(@RequestHeader(USER_ID) @Positive long ownerId) {
+        return itemClient.getItemsByOwnerId(ownerId);
     }
 
     @GetMapping("/search")

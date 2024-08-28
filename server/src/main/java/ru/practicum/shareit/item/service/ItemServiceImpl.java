@@ -8,20 +8,17 @@ import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.Status;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exception.InvalidCommentException;
-import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.comment.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemWithDateDto;
-import ru.practicum.shareit.item.mapper.CommentMapper;
+import ru.practicum.shareit.comment.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
-import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.comment.model.Comment;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.repository.CommentRepository;
+import ru.practicum.shareit.comment.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.model.ItemRequest;
-import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.util.Validator;
 
 import java.time.LocalDateTime;
@@ -34,14 +31,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class ItemServiceImpl implements ItemService {
-    private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final ItemMapper itemMapper;
     private final CommentMapper commentMapper;
     private final BookingMapper bookingMapper;
-    private final ItemRequestRepository itemRequestRepository;
     private final Validator validator;
 
     @Override
@@ -117,10 +112,7 @@ public class ItemServiceImpl implements ItemService {
     public CommentDto createComment(long userId, long itemId, CommentDto newComment) {
         User user = validator.validateAndGetUser(userId);
         Item item = validator.validateAndGetItem(itemId);
-        if (bookingRepository.findByUserId(userId, LocalDateTime.now()).isEmpty()) {
-            System.out.println(LocalDateTime.now());
-            throw new InvalidCommentException("Данный пользователь не использовал эту вещь, время : " + LocalDateTime.now());
-        }
+        validator.checkUserHasBookings(userId);
         Comment comment = commentMapper.commentDtoToComment(newComment);
         comment.setItem(item);
         comment.setAuthor(user);

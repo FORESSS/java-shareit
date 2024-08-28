@@ -2,6 +2,7 @@ package ru.practicum.shareit.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.practicum.shareit.booking.dto.RequestBookingDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.InvalidBookingException;
@@ -14,6 +15,8 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.repository.ItemRequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+
+import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
@@ -32,12 +35,6 @@ public class Validator {
     public User validateAndGetUser(long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new ValidationException(String.format("Пользователь с id: %d не найден", userId)));
-    }
-
-    public void checkItemId(long itemId) {
-        if (!itemRepository.existsById(itemId)) {
-            throw new ValidationException(String.format("Предмет с id: %d не найден", itemId));
-        }
     }
 
     public Item validateAndGetItem(long itemId) {
@@ -67,29 +64,33 @@ public class Validator {
         }
     }
 
-    public void checkBookingOwner(long userId, Item item) {
-        if (userId != item.getOwner().getId()) {
-            throw new PermissionDeniedException(String.format("Пользователь с id: %d не является владельцем", userId));
+    public void checkUserHasBookings(long userId) {
+        if (bookingRepository.findByUserId(userId, LocalDateTime.now()).isEmpty()) {
+            throw new InvalidBookingException("Данный пользователь не использовал эту вещь.");
         }
     }
 
-    public void checkBooker(long userId, Booking booking, Item item) {
-        if (userId != booking.getBooker().getId() && userId != item.getOwner().getId()) {
-            throw new InvalidBookingException(String.format("Пользователь с id: %d не является владельцем", userId));
+    public void validateBookingDates(RequestBookingDto creatingBooking) {
+        if (creatingBooking.getStart().isAfter(creatingBooking.getEnd())) {
+            throw new InvalidBookingException("Время старта бронирования должно быть до времени конца бронирования");
         }
     }
-
-   /* public void validateUserHasPastBooking(long userId) {
-        boolean hasPastBooking = bookingRepository.existsByBookerIdAndEndBeforeAndStatusNot(
-                userId, LocalDateTime.now(), BookingStatus.REJECTED);
-        if (!hasPastBooking) {
-            throw new PermissionDeniedException(String.format("Невозможно добавить комментарий пользователя с id: %d", userId));
-        }
-    }*/
 
     public void validateItemAvailability(Item item) {
         if (!item.getAvailable()) {
-            throw new InvalidBookingException(String.format("Предмет с id: %d не доступен для бронирования.", item.getId()));
+            throw new InvalidBookingException("Предмет недоступен для бронирования");
+        }
+    }
+
+    public void validateOwnerAccess(long ownerId, Booking booking) {
+        if (booking.getItem().getOwner().getId() != ownerId) {
+            throw new PermissionDeniedException("У вас нет доступа к этой информации");
+        }
+    }
+
+    public void validateUserAccessToBooking(long userId, Booking booking) {
+        if (booking.getItem().getOwner().getId() != userId && booking.getBooker().getId() != userId) {
+            throw new PermissionDeniedException("У вас нет доступа к этой информации");
         }
     }
 }

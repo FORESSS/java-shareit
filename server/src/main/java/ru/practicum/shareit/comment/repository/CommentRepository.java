@@ -1,11 +1,11 @@
-package ru.practicum.shareit.item.repository;
+package ru.practicum.shareit.comment.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.comment.model.Comment;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select c " +
@@ -13,5 +13,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "join c.item as i " +
             "join c.author as a " +
             "where i.id = :itemId ")
-    List<Comment> findByItemId(@Param("itemId") long itemId);
+    Collection<Comment> findByItemId(@Param("itemId") long itemId);
 }

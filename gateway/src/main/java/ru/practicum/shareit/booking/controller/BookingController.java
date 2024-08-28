@@ -18,21 +18,21 @@ public class BookingController {
     private final BookingClient bookingClient;
 
     @GetMapping("/{bookingId}")
-    public ResponseEntity<Object> findBookingById(@RequestHeader(USER_ID) @Positive long userId,
-                                                  @PathVariable @Positive long bookingId) {
-        return bookingClient.findBookingById(userId, bookingId);
+    public ResponseEntity<Object> getBookingById(@RequestHeader(USER_ID) @Positive long userId,
+                                                 @PathVariable @Positive long bookingId) {
+        return bookingClient.getBookingById(userId, bookingId);
     }
 
     @GetMapping
-    public ResponseEntity<Object> findBookingsByBooker(@RequestHeader(USER_ID) @Positive long bookerId,
-                                                       @RequestParam(defaultValue = "ALL") State state) {
-        return bookingClient.findBookingsByBooker(bookerId, state);
+    public ResponseEntity<Object> getBookingsByBooker(@RequestHeader(USER_ID) @Positive long bookerId,
+                                                      @RequestParam(defaultValue = "ALL") State state) {
+        return bookingClient.getBookingsByBooker(bookerId, state);
     }
 
     @GetMapping("/owner")
-    public ResponseEntity<Object> findBookingsByOwner(@RequestHeader(USER_ID) @Positive long ownerId,
-                                                      @RequestParam(defaultValue = "ALL") State state) {
-        return bookingClient.findBookingsByOwner(ownerId, state);
+    public ResponseEntity<Object> getBookingsByOwner(@RequestHeader(USER_ID) @Positive long ownerId,
+                                                     @RequestParam(defaultValue = "ALL") State state) {
+        return bookingClient.getBookingsByOwner(ownerId, state);
     }
 
     @PostMapping

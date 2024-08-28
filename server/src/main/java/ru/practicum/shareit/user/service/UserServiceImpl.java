@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final Validator validator;
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public Collection<UserDto> getAllUsers() {
         log.info("Получение списка всех пользователей");
         return userRepository.findAll().stream()
@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
                 .toList();
     }
 
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public UserDto getUserById(long userId) {
         User user = validator.validateAndGetUser(userId);
         log.info("Получение пользователя с id: {}", userId);

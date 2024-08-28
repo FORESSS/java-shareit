@@ -32,13 +32,6 @@ public class ErrorHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(InvalidCommentException.class)
-    public ErrorResponse handleInvalidCommentException(InvalidCommentException ex) {
-        log.error(ex.getMessage());
-        return new ErrorResponse("Ошибка добавления комментария", ex.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(InvalidBookingException.class)
     public ErrorResponse handleInvalidBookingException(InvalidBookingException ex) {
         log.error(ex.getMessage());

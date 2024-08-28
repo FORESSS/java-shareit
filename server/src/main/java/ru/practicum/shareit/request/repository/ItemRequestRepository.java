@@ -8,7 +8,6 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import java.util.Collection;
 
 public interface ItemRequestRepository extends JpaRepository<ItemRequest, Long> {
-
     @Query("select ir " +
             "from ItemRequest as ir " +
             "join ir.owner as o " +
