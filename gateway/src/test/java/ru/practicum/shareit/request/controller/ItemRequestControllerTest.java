@@ -82,6 +82,7 @@ class ItemRequestControllerTest {
                         .header("X-Sharer-User-Id", 1L))
                 .andExpect(status().isOk());
     }
+
     @Test
     void create() throws Exception {
         mvc.perform(post("/requests")
