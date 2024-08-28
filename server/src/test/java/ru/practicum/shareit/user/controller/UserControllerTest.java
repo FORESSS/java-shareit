@@ -25,41 +25,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
-
     @Autowired
     private ObjectMapper mapper;
-
     @Autowired
     private MockMvc mvc;
-
     @MockBean
     private UserService userService;
-
     private UserDto userDto;
 
     @BeforeEach
     void setUp() {
         userDto = UserDto.builder()
                 .id(1L)
-                .name("Варвара")
-                .email("var@ya.ru")
+                .name("User")
+                .email("test@test.com")
                 .build();
     }
 
     @Test
-    void findAll() throws Exception {
+    void testGetAllUsers() throws Exception {
         List<UserDto> users = new ArrayList<>();
-
         for (int i = 0; i < 5; i++) {
             UserDto userDto = UserDto.builder()
                     .id(i)
-                    .name("Варвара")
-                    .email("var@ya.ru")
+                    .name("User")
+                    .email("test@test.com")
                     .build();
-
             users.add(userDto);
         }
-
         when(userService.getAllUsers())
                 .thenReturn(users);
 
@@ -73,7 +66,23 @@ class UserControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void testGetUserById() throws Exception {
+        when(userService.getUserById(anyLong()))
+                .thenReturn(userDto);
+
+        mvc.perform(get("/users/1")
+                        .header("X-Sharer-User-Id", 1L)
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
+                .andExpect(jsonPath("$.name", is(userDto.getName())))
+                .andExpect(jsonPath("$.email", is(userDto.getEmail())));
+    }
+
+    @Test
+    void testCreateUser() throws Exception {
         when(userService.createUser(any()))
                 .thenReturn(userDto);
 
@@ -89,9 +98,9 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.email", is(userDto.getEmail())));
     }
 
-   /* @Test
-    void update() throws Exception {
-        when(userService.updateUser(any(), anyLong()))
+    @Test
+    void testUpdateUser() throws Exception {
+        when(userService.updateUser(anyLong(), any()))
                 .thenReturn(userDto);
 
         mvc.perform(patch("/users/1")
@@ -104,31 +113,15 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
                 .andExpect(jsonPath("$.name", is(userDto.getName())))
                 .andExpect(jsonPath("$.email", is(userDto.getEmail())));
-    }*/
+    }
 
     @Test
-    void deleteUser() throws Exception {
+    void testDeleteUser() throws Exception {
         mvc.perform(delete("/users/1")
                         .header("X-Sharer-User-Id", 1L)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void findById() throws Exception {
-        when(userService.getUserById(anyLong()))
-                .thenReturn(userDto);
-
-        mvc.perform(get("/users/1")
-                        .header("X-Sharer-User-Id", 1L)
-                        .characterEncoding(StandardCharsets.UTF_8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(userDto.getId()), Long.class))
-                .andExpect(jsonPath("$.name", is(userDto.getName())))
-                .andExpect(jsonPath("$.email", is(userDto.getEmail())));
     }
 }
